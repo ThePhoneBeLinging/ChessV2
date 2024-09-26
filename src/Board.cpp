@@ -91,6 +91,47 @@ std::vector<Move> Board::generateAllLegalMoves(bool isWhite)
     return legalMoves;
 }
 
+std::vector<std::pair<int, int>> Board::getAllPieces(Pieces piece, bool isWhite)
+{
+    uint64_t bitBoard = 0;
+    switch (piece)
+    {
+    case Pieces::Pawn:
+        bitBoard = isWhite ? whitePawnsBitBoard_ : blackPawnsBitBoard_;
+        break;
+    case Pieces::Rook:
+        bitBoard = isWhite ? whiteRooksBitBoard_ : blackRooksBitBoard_;
+        break;
+    case Pieces::Knight:
+        bitBoard = isWhite ? whiteKnightsBitBoard_ : blackKnightsBitBoard_;
+        break;
+    case Pieces::Bishop:
+        bitBoard = isWhite ? whiteBishopsBitBoard_ : blackBishopsBitBoard_;
+        break;
+    case Pieces::Queen:
+        bitBoard = isWhite ? whiteQueensBitBoard_ : blackQueensBitBoard_;
+        break;
+    case Pieces::King:
+        bitBoard = isWhite ? whiteKingBitBoard_ : blackKingBitBoard_;
+        break;
+    default:
+        throw std::invalid_argument("Invalid piece type or color");
+    }
+
+    std::vector<std::pair<int, int>> locations;
+
+    for (int i = 0; i < 64; ++i)
+    {
+        if (bitBoard & (1ULL << i))
+        {
+            int x = i % 8;
+            int y = i / 8;
+            locations.emplace_back(x, y);
+        }
+    }
+    return locations;
+}
+
 bool Board::isMoveLegal(const Move& move, bool isWhite)
 {
     // TODO Implement logic to check if a move is legal (e.g., does not leave the king in check)

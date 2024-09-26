@@ -8,6 +8,7 @@
 #include <vector>
 #include "MoveGeneration.h"
 #include "Move.h"
+#include "Pieces.h"
 
 
 class Board
@@ -16,6 +17,8 @@ public:
     Board();
     Board(Board& board) = default;
     std::vector<Move> generateAllLegalMoves(bool isWhite);
+
+    std::vector<std::pair<int, int>> getAllPieces(Pieces piece, bool isWhite);
 
 private:
     bool isMoveLegal(const Move& move, bool isWhite);

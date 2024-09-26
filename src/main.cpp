@@ -8,7 +8,7 @@ int main()
 {
     EngineBase::loadTexture("Resources/green.png");
     EngineBase::loadTexture("Resources/brown.png");
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 64; i++)
     {
         EngineBase::addDrawAble();
     }
