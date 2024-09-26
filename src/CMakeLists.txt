@@ -13,6 +13,7 @@ add_executable(ChessV2 main.cpp
         Move.h
         MoveGeneration.cpp
         MoveGeneration.h
+        Pieces.h
 )
 
 target_link_libraries(ChessV2 PUBLIC

@@ -8,11 +8,12 @@
 #include <thread>
 
 #include "Board.h"
+#include "EngineBase/EngineBase.h"
 
 void ChessV2::launch()
 {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    Board();
+    EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, 0, SecondaryCMD::WIDTH, 50});
+    EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, 0, SecondaryCMD::HEIGHT, 50});
     std::cout << "Hello, World!" << std::endl;
 }
 
