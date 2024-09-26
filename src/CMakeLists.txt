@@ -9,9 +9,13 @@ add_executable(ChessV2 main.cpp
         Board.cpp
         Board.h
         DebugPrints.cpp
-        DebugPrints.h)
+        DebugPrints.h
+        Move.h
+        MoveGeneration.cpp
+        MoveGeneration.h
+)
 
 target_link_libraries(ChessV2 PUBLIC
-    EngineBase
-    Utility
-    )
+        EngineBase
+        Utility
+)

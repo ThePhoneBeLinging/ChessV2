@@ -4,7 +4,7 @@
 
 #ifndef CHESSV2_H
 #define CHESSV2_H
-
+#include <cstdint>
 
 
 class ChessV2
@@ -12,9 +12,9 @@ class ChessV2
 public:
     static void launch();
     static void update(float deltaTime);
+
 private:
 };
-
 
 
 #endif //CHESSV2_H

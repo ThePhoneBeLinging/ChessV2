@@ -53,3 +53,46 @@ Board::Board()
     std::cout << "Black King:\n";
     DebugPrints::printMatrix(bKing);
 }
+
+
+std::vector<Move> Board::generateAllLegalMoves(bool isWhite)
+{
+    std::vector<Move> allMoves;
+    std::vector<Move> pseudoLegalMoves;
+
+    pseudoLegalMoves = MoveGeneration::generatePawnMoves(*this, isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+
+    pseudoLegalMoves = MoveGeneration::generateRookMoves(*this, isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+
+    pseudoLegalMoves = MoveGeneration::generateKnightMoves(*this, isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+
+    pseudoLegalMoves = MoveGeneration::generateBishopMoves(*this, isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+
+    pseudoLegalMoves = MoveGeneration::generateQueenMoves(*this, isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+
+    pseudoLegalMoves = MoveGeneration::generateKingMoves(*this, isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+
+    // Filter out illegal moves
+    std::vector<Move> legalMoves;
+    for (const Move& move : allMoves)
+    {
+        if (isMoveLegal(move, isWhite))
+        {
+            legalMoves.push_back(move);
+        }
+    }
+
+    return legalMoves;
+}
+
+bool Board::isMoveLegal(const Move& move, bool isWhite)
+{
+    // TODO Implement logic to check if a move is legal (e.g., does not leave the king in check)
+    return true;
+}

@@ -5,6 +5,9 @@
 #ifndef BOARD_H
 #define BOARD_H
 #include <cstdint>
+#include <vector>
+#include "MoveGeneration.h"
+#include "Move.h"
 
 
 class Board
@@ -12,8 +15,10 @@ class Board
 public:
     Board();
     Board(Board& board);
+    std::vector<Move> generateAllLegalMoves(bool isWhite);
 
 private:
+    bool isMoveLegal(const Move& move, bool isWhite);
     uint64_t wPawns_;
     uint64_t wRooks;
     uint64_t wKnights;

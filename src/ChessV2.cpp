@@ -5,11 +5,13 @@
 #include "ChessV2.h"
 
 #include <iostream>
+#include <thread>
 
 #include "Board.h"
 
 void ChessV2::launch()
 {
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     Board();
     std::cout << "Hello, World!" << std::endl;
 }
