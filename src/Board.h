@@ -19,18 +19,18 @@ public:
 
 private:
     bool isMoveLegal(const Move& move, bool isWhite);
-    uint64_t wPawns_;
-    uint64_t wRooks;
-    uint64_t wKnights;
-    uint64_t wBishops;
-    uint64_t wQueens;
-    uint64_t wKing;
-    uint64_t bPawns;
-    uint64_t bRooks;
-    uint64_t bKnights;
-    uint64_t bBishops;
-    uint64_t bQueens;
-    uint64_t bKing;
+    uint64_t whitePawnsBitBoard_;
+    uint64_t whiteRooksBitBoard_;
+    uint64_t whiteKnightsBitBoard_;
+    uint64_t whiteBishopsBitBoard_;
+    uint64_t whiteQueensBitBoard_;
+    uint64_t whiteKingBitBoard_;
+    uint64_t blackPawnsBitBoard_;
+    uint64_t blackRooksBitBoard_;
+    uint64_t blackKnightsBitBoard_;
+    uint64_t blackBishopsBitBoard_;
+    uint64_t blackQueensBitBoard_;
+    uint64_t blackKingBitBoard_;
 };
 
 

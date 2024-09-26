@@ -12,46 +12,46 @@
 Board::Board()
 {
     // Initialize white pieces
-    wPawns_ = 0x000000000000FF00;
-    wRooks = 0x0000000000000081;
-    wKnights = 0x0000000000000042;
-    wBishops = 0x0000000000000024;
-    wQueens = 0x0000000000000010;
-    wKing = 0x0000000000000008;
+    whitePawnsBitBoard_ = 0x000000000000FF00;
+    whiteRooksBitBoard_ = 0x0000000000000081;
+    whiteKnightsBitBoard_ = 0x0000000000000042;
+    whiteBishopsBitBoard_ = 0x0000000000000024;
+    whiteQueensBitBoard_ = 0x0000000000000010;
+    whiteKingBitBoard_ = 0x0000000000000008;
 
     // Initialize black pieces
-    bPawns = 0x00FF000000000000;
-    bRooks = 0x8100000000000000;
-    bKnights = 0x4200000000000000;
-    bBishops = 0x2400000000000000;
-    bQueens = 0x1000000000000000;
-    bKing = 0x0800000000000000;
+    blackPawnsBitBoard_ = 0x00FF000000000000;
+    blackRooksBitBoard_ = 0x8100000000000000;
+    blackKnightsBitBoard_ = 0x4200000000000000;
+    blackBishopsBitBoard_ = 0x2400000000000000;
+    blackQueensBitBoard_ = 0x1000000000000000;
+    blackKingBitBoard_ = 0x0800000000000000;
 
     // Debug print the initial positions
     std::cout << "White Pawns:\n";
-    DebugPrints::printMatrix(wPawns_);
+    DebugPrints::printMatrix(whitePawnsBitBoard_);
     std::cout << "White Rooks:\n";
-    DebugPrints::printMatrix(wRooks);
+    DebugPrints::printMatrix(whiteRooksBitBoard_);
     std::cout << "White Knights:\n";
-    DebugPrints::printMatrix(wKnights);
+    DebugPrints::printMatrix(whiteKnightsBitBoard_);
     std::cout << "White Bishops:\n";
-    DebugPrints::printMatrix(wBishops);
+    DebugPrints::printMatrix(whiteBishopsBitBoard_);
     std::cout << "White Queens:\n";
-    DebugPrints::printMatrix(wQueens);
+    DebugPrints::printMatrix(whiteQueensBitBoard_);
     std::cout << "White King:\n";
-    DebugPrints::printMatrix(wKing);
+    DebugPrints::printMatrix(whiteKingBitBoard_);
     std::cout << "Black Pawns:\n";
-    DebugPrints::printMatrix(bPawns);
+    DebugPrints::printMatrix(blackPawnsBitBoard_);
     std::cout << "Black Rooks:\n";
-    DebugPrints::printMatrix(bRooks);
+    DebugPrints::printMatrix(blackRooksBitBoard_);
     std::cout << "Black Knights:\n";
-    DebugPrints::printMatrix(bKnights);
+    DebugPrints::printMatrix(blackKnightsBitBoard_);
     std::cout << "Black Bishops:\n";
-    DebugPrints::printMatrix(bBishops);
+    DebugPrints::printMatrix(blackPawnsBitBoard_);
     std::cout << "Black Queens:\n";
-    DebugPrints::printMatrix(bQueens);
+    DebugPrints::printMatrix(blackQueensBitBoard_);
     std::cout << "Black King:\n";
-    DebugPrints::printMatrix(bKing);
+    DebugPrints::printMatrix(blackKingBitBoard_);
 }
 
 
