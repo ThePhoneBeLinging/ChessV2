@@ -8,6 +8,7 @@ int main()
 {
     EngineBase::loadTexture("Resources/green.png");
     EngineBase::loadTexture("Resources/brown.png");
+    EngineBase::loadTexture("invisibleTexture");
     for (int i = 0; i < 128; i++)
     {
         EngineBase::addDrawAble();

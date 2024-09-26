@@ -14,7 +14,6 @@
 
 void ChessV2::launch()
 {
-    int rowNumber = 0;
     for (int i = 0; i < 64; i++)
     {
         EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::WIDTH, TILESIZE});
@@ -25,6 +24,26 @@ void ChessV2::launch()
         EngineBase::executeCommand({
             PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::Y, getDrawLocationFromTile(i % 8, i / 8).second
         });
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX, 0});
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::Z, 1});
+    }
+
+    EngineBase::addDrawAble();
+
+    for (int i = 64; i < 128; i++)
+    {
+        int rowNumber = i / 8;
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::WIDTH, TILESIZE});
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::HEIGHT, TILESIZE});
+        EngineBase::executeCommand({
+            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::X,
+            getDrawLocationFromTile((i - 64) % 8, (i - 64) / 8).first
+        });
+        EngineBase::executeCommand({
+            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::Y,
+            getDrawLocationFromTile((i - 64) % 8, (i - 64) / 8).second
+        });
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX, 3});
         if ((i % 8 + rowNumber) % 2 == 1)
         {
             EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX, 1});
@@ -37,11 +56,6 @@ void ChessV2::launch()
         {
             rowNumber++;
         }
-    }
-    for (int i = 64; i < 128; i++)
-    {
-        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::WIDTH, TILESIZE});
-        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::HEIGHT, TILESIZE});
     }
 }
 
