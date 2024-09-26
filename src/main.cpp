@@ -9,6 +9,6 @@ int main()
     std::thread chessThread(ChessV2::launch);
     EngineBase::startGUI(ChessV2::update);
     chessThread.join();
-    std::cout << "Hello, World!" << std::endl;
+    std::cout << "Closing App!" << std::endl;
     return 0;
 }

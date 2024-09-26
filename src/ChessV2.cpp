@@ -6,8 +6,11 @@
 
 #include <iostream>
 
+#include "Board.h"
+
 void ChessV2::launch()
 {
+    Board();
     std::cout << "Hello, World!" << std::endl;
 }
 

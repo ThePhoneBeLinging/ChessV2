@@ -5,7 +5,11 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(ChessV2 main.cpp
         ChessV2.cpp
-        ChessV2.h)
+        ChessV2.h
+        Board.cpp
+        Board.h
+        DebugPrints.cpp
+        DebugPrints.h)
 
 target_link_libraries(ChessV2 PUBLIC
     EngineBase
