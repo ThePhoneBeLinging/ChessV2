@@ -24,10 +24,10 @@ void ChessV2::launch()
         EngineBase::executeCommand({
             PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::Y, getDrawLocationFromTile(i % 8, i / 8).second
         });
-        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX, 0});
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX, 3});
         EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::Z, 1});
     }
-
+    // This is a hack to force EngineBase to sort the DrawAbles based on Z value
     EngineBase::addDrawAble();
 
     for (int i = 64; i < 128; i++)
@@ -51,10 +51,6 @@ void ChessV2::launch()
         else
         {
             EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX, 2});
-        }
-        if (i % 8 == 7)
-        {
-            rowNumber++;
         }
     }
 }
