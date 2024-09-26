@@ -20,10 +20,10 @@ void ChessV2::launch()
         EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::WIDTH, TILESIZE});
         EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::HEIGHT, TILESIZE});
         EngineBase::executeCommand({
-            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::X, LEFTMARGIN + (float)(i % 8) * TILESIZE
+            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::X, getDrawLocationFromTile(i % 8, i / 8).first
         });
         EngineBase::executeCommand({
-            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::Y, TOPMARGIN + (float)(i / 8) * TILESIZE
+            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::Y, getDrawLocationFromTile(i % 8, i / 8).second
         });
         if ((i % 8 + rowNumber) % 2 == 1)
         {
@@ -38,10 +38,19 @@ void ChessV2::launch()
             rowNumber++;
         }
     }
-    std::cout << "Hello, World!" << std::endl;
+    for (int i = 64; i < 128; i++)
+    {
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::WIDTH, TILESIZE});
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::HEIGHT, TILESIZE});
+    }
 }
 
 void ChessV2::update(float deltaTime)
 {
     // This is currently not needed for the chess game
+}
+
+std::pair<float, float> ChessV2::getDrawLocationFromTile(int x, int y)
+{
+    return {LEFTMARGIN + (float)x * TILESIZE, TOPMARGIN + (float)y * TILESIZE};
 }
