@@ -36,6 +36,6 @@ def main():
         if (os.getcwd().endswith("Scripts")):
             path = "../dependencies"
         clone_or_pull(repo_url, path)
-
+    ensure_dir_exists("Resources")
 if __name__ == '__main__':
     main()
