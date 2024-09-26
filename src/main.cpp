@@ -3,12 +3,14 @@
 #include "ChessV2.h"
 #include <thread>
 #include "EngineBase/EngineBase.h"
+#include "Texture/TextureLoader.h"
 
 int main()
 {
-    EngineBase::loadTexture("Resources/green.png");
-    EngineBase::loadTexture("Resources/brown.png");
+    EngineBase::loadTexture("Resources/Images/green.png");
+    EngineBase::loadTexture("Resources/Images/brown.png");
     EngineBase::loadTexture("invisibleTexture");
+    TextureLoader::initializePieceTextures();
     for (int i = 0; i < 128; i++)
     {
         EngineBase::addDrawAble();

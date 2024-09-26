@@ -14,6 +14,9 @@ add_executable(ChessV2 main.cpp
         MoveGeneration.cpp
         MoveGeneration.h
         Pieces.h
+        Texture/TextureIndices.h
+        Texture/TextureLoader.cpp
+        Texture/TextureLoader.h
 )
 
 target_link_libraries(ChessV2 PUBLIC

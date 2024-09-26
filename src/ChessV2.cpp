@@ -11,6 +11,7 @@
 #include <thread>
 #include "Board.h"
 #include "EngineBase/EngineBase.h"
+#include "Texture/TextureIndices.h"
 
 void ChessV2::launch()
 {
@@ -24,7 +25,10 @@ void ChessV2::launch()
         EngineBase::executeCommand({
             PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::Y, getDrawLocationFromTile(i % 8, i / 8).second
         });
-        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX, 3});
+        EngineBase::executeCommand({
+            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX,
+            (int)TextureIndices::EMPTY_BOARD_SQUARE
+        });
         EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::Z, 1});
     }
     // This is a hack to force EngineBase to sort the DrawAbles based on Z value
