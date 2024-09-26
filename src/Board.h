@@ -14,7 +14,7 @@ class Board
 {
 public:
     Board();
-    Board(Board& board);
+    Board(Board& board) = default;
     std::vector<Move> generateAllLegalMoves(bool isWhite);
 
 private:
