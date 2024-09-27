@@ -8,8 +8,6 @@ add_executable(ChessV2 main.cpp
         ChessV2.h
         Board.cpp
         Board.h
-        DebugPrints.cpp
-        DebugPrints.h
         Move.h
         MoveGeneration.cpp
         MoveGeneration.h

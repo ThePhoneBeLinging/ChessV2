@@ -7,7 +7,6 @@
 #include <iostream>
 #include <MacTypes.h>
 
-#include "DebugPrints.h"
 #include "EngineBase/EngineBase.h"
 #include "Texture/TextureIndices.h"
 
@@ -28,32 +27,6 @@ Board::Board()
     blackBishopsBitBoard_ = 0x2400000000000000;
     blackQueensBitBoard_ = 0x0800000000000000;
     blackKingBitBoard_ = 0x1000000000000000;
-
-    // Debug print the initial positions
-    std::cout << "White Pawns:\n";
-    DebugPrints::printMatrix(whitePawnsBitBoard_);
-    std::cout << "White Rooks:\n";
-    DebugPrints::printMatrix(whiteRooksBitBoard_);
-    std::cout << "White Knights:\n";
-    DebugPrints::printMatrix(whiteKnightsBitBoard_);
-    std::cout << "White Bishops:\n";
-    DebugPrints::printMatrix(whiteBishopsBitBoard_);
-    std::cout << "White Queens:\n";
-    DebugPrints::printMatrix(whiteQueensBitBoard_);
-    std::cout << "White King:\n";
-    DebugPrints::printMatrix(whiteKingBitBoard_);
-    std::cout << "Black Pawns:\n";
-    DebugPrints::printMatrix(blackPawnsBitBoard_);
-    std::cout << "Black Rooks:\n";
-    DebugPrints::printMatrix(blackRooksBitBoard_);
-    std::cout << "Black Knights:\n";
-    DebugPrints::printMatrix(blackKnightsBitBoard_);
-    std::cout << "Black Bishops:\n";
-    DebugPrints::printMatrix(blackPawnsBitBoard_);
-    std::cout << "Black Queens:\n";
-    DebugPrints::printMatrix(blackQueensBitBoard_);
-    std::cout << "Black King:\n";
-    DebugPrints::printMatrix(blackKingBitBoard_);
 }
 
 
