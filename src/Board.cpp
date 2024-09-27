@@ -8,6 +8,8 @@
 #include <MacTypes.h>
 
 #include "DebugPrints.h"
+#include "EngineBase/EngineBase.h"
+#include "Texture/TextureIndices.h"
 
 Board::Board()
 {
@@ -16,16 +18,16 @@ Board::Board()
     whiteRooksBitBoard_ = 0x0000000000000081;
     whiteKnightsBitBoard_ = 0x0000000000000042;
     whiteBishopsBitBoard_ = 0x0000000000000024;
-    whiteQueensBitBoard_ = 0x0000000000000010;
-    whiteKingBitBoard_ = 0x0000000000000008;
+    whiteQueensBitBoard_ = 0x0000000000000008;
+    whiteKingBitBoard_ = 0x0000000000000010;
 
     // Initialize black pieces
     blackPawnsBitBoard_ = 0x00FF000000000000;
     blackRooksBitBoard_ = 0x8100000000000000;
     blackKnightsBitBoard_ = 0x4200000000000000;
     blackBishopsBitBoard_ = 0x2400000000000000;
-    blackQueensBitBoard_ = 0x1000000000000000;
-    blackKingBitBoard_ = 0x0800000000000000;
+    blackQueensBitBoard_ = 0x0800000000000000;
+    blackKingBitBoard_ = 0x1000000000000000;
 
     // Debug print the initial positions
     std::cout << "White Pawns:\n";
@@ -125,15 +127,79 @@ std::vector<std::pair<int, int>> Board::getAllPieces(Pieces piece, bool isWhite)
         if (bitBoard & (1ULL << i))
         {
             int x = i % 8;
-            int y = i / 8;
+            int y = 7 - (i / 8);
             locations.emplace_back(x, y);
         }
     }
     return locations;
 }
 
+void Board::drawBoard()
+{
+    // TODO Effectivise this:
+    for (int i = 0; i < 64; i++)
+    {
+        EngineBase::executeCommand({
+            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX,
+            (float)TextureIndices::EMPTY_BOARD_SQUARE
+        });
+    }
+    TextureIndices textureToUse = TextureIndices::EMPTY_BOARD_SQUARE;
+    for (int i = 0; i < 12; i++)
+    {
+        bool isWhite = i > 5;
+        std::vector<std::pair<int, int>> vectorOfPairs;
+        switch (i % 6)
+        {
+        case 0:
+            {
+                vectorOfPairs = getAllPieces(Pieces::Pawn, isWhite);
+                textureToUse = isWhite ? TextureIndices::WHITE_PAWN : TextureIndices::BLACK_PAWN;
+                break;
+            }
+        case 1:
+            {
+                vectorOfPairs = getAllPieces(Pieces::Knight, isWhite);
+                textureToUse = isWhite ? TextureIndices::WHITE_KNIGHT : TextureIndices::BLACK_KNIGHT;
+                break;
+            }
+        case 2:
+            {
+                vectorOfPairs = getAllPieces(Pieces::Bishop, isWhite);
+                textureToUse = isWhite ? TextureIndices::WHITE_BISHOP : TextureIndices::BLACK_BISHOP;
+                break;
+            }
+        case 3:
+            {
+                vectorOfPairs = getAllPieces(Pieces::Rook, isWhite);
+                textureToUse = isWhite ? TextureIndices::WHITE_ROOK : TextureIndices::BLACK_ROOK;
+                break;
+            }
+        case 4:
+            {
+                vectorOfPairs = getAllPieces(Pieces::King, isWhite);
+                textureToUse = isWhite ? TextureIndices::WHITE_KING : TextureIndices::BLACK_KING;
+                break;
+            }
+        case 5:
+            {
+                vectorOfPairs = getAllPieces(Pieces::Queen, isWhite);
+                textureToUse = isWhite ? TextureIndices::WHITE_QUEEN : TextureIndices::BLACK_QUEEN;
+                break;
+            }
+        }
+        for (auto pairs : vectorOfPairs)
+        {
+            EngineBase::executeCommand({
+                PrimaryCMD::UPDATE, ObjectType::DRAWABLE, pairs.first + pairs.second * 8, SecondaryCMD::TEXTUREINDEX,
+                (float)textureToUse
+            });
+        }
+    }
+}
+
 bool Board::isMoveLegal(const Move& move, bool isWhite)
 {
-    // TODO Implement logic to check if a move is legal (e.g., does not leave the king in check)
+    // TODO Implement logic to check if a move is legal (does not leave the king in check)
     return true;
 }

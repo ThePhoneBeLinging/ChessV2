@@ -17,8 +17,8 @@ public:
     Board();
     Board(Board& board) = default;
     std::vector<Move> generateAllLegalMoves(bool isWhite);
-
     std::vector<std::pair<int, int>> getAllPieces(Pieces piece, bool isWhite);
+    void drawBoard();
 
 private:
     bool isMoveLegal(const Move& move, bool isWhite);

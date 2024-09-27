@@ -57,6 +57,8 @@ void ChessV2::launch()
             EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX, 2});
         }
     }
+    auto board = Board();
+    board.drawBoard();
 }
 
 void ChessV2::update(float deltaTime)
