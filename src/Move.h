@@ -9,6 +9,7 @@
 
 typedef struct Move
 {
+    // Only the position of the piece
     uint64_t from;
     uint64_t to;
 } Move;
