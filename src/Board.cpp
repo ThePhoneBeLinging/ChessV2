@@ -100,7 +100,7 @@ std::vector<std::pair<int, int>> Board::getAllPieces(Pieces piece, bool isWhite)
         if (bitBoard & (1ULL << i))
         {
             int x = i % 8;
-            int y = 7 - (i / 8);
+            int y = i / 8;
             locations.emplace_back(x, y);
         }
     }
