@@ -17,7 +17,7 @@ public:
     Board(Board& board) = default;
     std::vector<Move> generateAllLegalMoves(bool isWhite);
     std::vector<std::pair<int, int>> getAllPieces(Pieces piece, bool isWhite);
-    static uint64_t getNumberFromLocation(std::pair<int, int> location);
+    static uint64_t getBitBoardFromLocation(std::pair<int, int> location);
     void drawBoard();
 
 

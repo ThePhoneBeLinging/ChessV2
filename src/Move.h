@@ -4,12 +4,13 @@
 
 #ifndef MOVE_H
 #define MOVE_H
-#include <cstdint>
+
+#include "Pieces.h"
 
 typedef struct Move
 {
-    uint64_t beforeMove;
-    uint64_t afterMove;
+    uint64_t from;
+    uint64_t to;
 } Move;
 
 #endif //MOVE_H

@@ -107,7 +107,7 @@ std::vector<std::pair<int, int>> Board::getAllPieces(Pieces piece, bool isWhite)
     return locations;
 }
 
-uint64_t Board::getNumberFromLocation(std::pair<int, int> location)
+uint64_t Board::getBitBoardFromLocation(std::pair<int, int> location)
 {
     return 1ULL << (location.first + location.second * 8);
 }
@@ -196,7 +196,7 @@ bool Board::isMoveLegal(const Move& move, bool isWhite)
 
 bool Board::isTileOccupiedByColor(std::pair<int, int> location, bool isWhite) const
 {
-    auto bitBoardOfPos = getNumberFromLocation(location);
+    auto bitBoardOfPos = getBitBoardFromLocation(location);
     auto bitBoardOfColor = isWhite ? getWhiteBitBoard() : getBlackBitBoard();
     return bitBoardOfPos & bitBoardOfColor;
 }
@@ -219,14 +219,16 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
         if (not isTileOccupiedByColor(newLocation, true) && not isTileOccupiedByColor(newLocation, false)
             && isPosInsideBoard(newLocation))
         {
-            legalPositions.push_back(newLocation);
+            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            continue;
         }
         // Check if the pawn can move two steps forward
         newLocation.second += (isWhite ? 1 : -1);
         if (pair.first == (isWhite ? 1 : 6) && not isTileOccupiedByColor(newLocation, true)
             && not isTileOccupiedByColor(newLocation, false))
         {
-            legalPositions.push_back(newLocation);
+            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            continue;
         }
         // Resets newLocation
         newLocation = {pair.first, pair.second};
@@ -234,7 +236,8 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
         newLocation = {pair.first + (isWhite ? 1 : -1), pair.second + (isWhite ? 1 : -1)};
         if (isTileOccupiedByColor(newLocation, false) && isPosInsideBoard(newLocation))
         {
-            legalPositions.push_back(newLocation);
+            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            continue;
         }
     }
     return moves;
