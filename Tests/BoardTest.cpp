@@ -112,7 +112,13 @@ TEST_F(BoardTest, IsPosInsideBoard)
     EXPECT_FALSE(board->isPosInsideBoard({0, 8}));
 }
 
-
+TEST_F(BoardTest, GenerateAllLegalMoves)
+{
+    // Check if the number of legal moves for white is correct
+    EXPECT_EQ(board->generateAllLegalMoves(true).size(), 20);
+    // Check if the number of legal moves for black is correct
+    EXPECT_EQ(board->generateAllLegalMoves(false).size(), 20);
+}
 
 int main(int argc, char** argv)
 {
