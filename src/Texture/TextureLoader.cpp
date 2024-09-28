@@ -12,7 +12,7 @@ void TextureLoader::initializePieceTextures()
     std::vector<std::string> prefix = {"W", "B"};
     std::vector<std::string> pieces = {"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"};
 
-    for (const auto p : prefix)
+    for (const auto& p : prefix)
     {
         for (const auto& piece : pieces)
         {
