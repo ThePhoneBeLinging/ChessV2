@@ -250,40 +250,8 @@ std::vector<Move> Board::generateAllRookMoves(bool isWhite)
     auto locationOfPieces = getAllPieces(Pieces::Rook, isWhite);
     for (auto& pair : locationOfPieces)
     {
-        for (int i = -pair.first; i < 8 - pair.first; i++)
-        {
-            if (i == 0)
-            {
-                continue;
-            }
-            std::pair<int, int> newLocation = {pair.first + i, pair.second};
-            if (isTileOccupiedByColor(newLocation, true))
-            {
-                break;
-            }
-            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
-            if (isTileOccupiedByColor(newLocation, false))
-            {
-                break;
-            }
-        }
-        for (int i = -pair.second; i < 8 - pair.second; i++)
-        {
-            if (i == 0)
-            {
-                continue;
-            }
-            std::pair<int, int> newLocation = {pair.first, pair.second + i};
-            if (isTileOccupiedByColor(newLocation, true))
-            {
-                break;
-            }
-            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
-            if (isTileOccupiedByColor(newLocation, false))
-            {
-                break;
-            }
-        }
+        auto movesFromLocation = generateRookMovesFromLocation(pair, isWhite);
+        moves.insert(moves.end(), movesFromLocation.begin(), movesFromLocation.end());
     }
     return moves;
 }
@@ -328,23 +296,8 @@ std::vector<Move> Board::generateAllBishopMoves(bool isWhite)
 
     for (auto& pair : locationOfPieces)
     {
-        for (int i = -8; i < 8; i++)
-        {
-            std::pair<int, int> newLocation = {pair.first + i, pair.second + i};
-            if (i == 0 || isPosInsideBoard(newLocation))
-            {
-                continue;
-            }
-            if (isTileOccupiedByColor(newLocation, true))
-            {
-                break;
-            }
-            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
-            if (isTileOccupiedByColor(newLocation, false))
-            {
-                break;
-            }
-        }
+        auto movesFromLocation = generateBishopMovesFromLocation(pair, isWhite);
+        moves.insert(moves.end(), movesFromLocation.begin(), movesFromLocation.end());
     }
 
     return moves;
@@ -352,8 +305,84 @@ std::vector<Move> Board::generateAllBishopMoves(bool isWhite)
 
 std::vector<Move> Board::generateAllQueenMoves(bool isWhite)
 {
+    std::vector<Move> moves;
+
+    auto locationOfPieces = getAllPieces(Pieces::Queen, isWhite);
+
+    for (auto& pair : locationOfPieces)
+    {
+        auto rookMoves = generateRookMovesFromLocation(pair, isWhite);
+        auto bishopMoves = generateBishopMovesFromLocation(pair, isWhite);
+        moves.insert(moves.end(), rookMoves.begin(), rookMoves.end());
+        moves.insert(moves.end(), bishopMoves.begin(), bishopMoves.end());
+    }
+
+    return moves;
 }
 
 std::vector<Move> Board::generateAllKingMoves(bool isWhite)
 {
+}
+
+std::vector<Move> Board::generateRookMovesFromLocation(std::pair<int, int> pair, bool isWhite)
+{
+    std::vector<Move> moves;
+    for (int i = -pair.first; i < 8 - pair.first; i++)
+    {
+        if (i == 0)
+        {
+            continue;
+        }
+        std::pair<int, int> newLocation = {pair.first + i, pair.second};
+        if (isTileOccupiedByColor(newLocation, true))
+        {
+            break;
+        }
+        moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+        if (isTileOccupiedByColor(newLocation, false))
+        {
+            break;
+        }
+    }
+    for (int i = -pair.second; i < 8 - pair.second; i++)
+    {
+        if (i == 0)
+        {
+            continue;
+        }
+        std::pair<int, int> newLocation = {pair.first, pair.second + i};
+        if (isTileOccupiedByColor(newLocation, true))
+        {
+            break;
+        }
+        moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+        if (isTileOccupiedByColor(newLocation, false))
+        {
+            break;
+        }
+    }
+    return moves;
+}
+
+std::vector<Move> Board::generateBishopMovesFromLocation(std::pair<int, int> pair, bool isWhite)
+{
+    std::vector<Move> moves;
+    for (int i = -8; i < 8; i++)
+    {
+        std::pair<int, int> newLocation = {pair.first + i, pair.second + i};
+        if (i == 0 || isPosInsideBoard(newLocation))
+        {
+            continue;
+        }
+        if (isTileOccupiedByColor(newLocation, true))
+        {
+            break;
+        }
+        moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+        if (isTileOccupiedByColor(newLocation, false))
+        {
+            break;
+        }
+    }
+    return moves;
 }

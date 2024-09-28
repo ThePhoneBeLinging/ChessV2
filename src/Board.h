@@ -37,6 +37,8 @@ private:
     std::vector<Move> generateAllQueenMoves(bool isWhite);
     std::vector<Move> generateAllKingMoves(bool isWhite);
 
+    std::vector<Move> generateRookMovesFromLocation(std::pair<int, int> location, bool isWhite);
+    std::vector<Move> generateBishopMovesFromLocation(std::pair<int, int> location, bool isWhite);
 
     uint64_t whitePawnsBitBoard_;
     uint64_t whiteRooksBitBoard_;
