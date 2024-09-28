@@ -259,8 +259,10 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
         }
         // Check if the pawn can move two steps forward
         newLocation.second += (isWhite ? 1 : -1);
-        if (pair.first == (isWhite ? 1 : 6) && not isTileOccupiedByColor(newLocation, true)
-            && not isTileOccupiedByColor(newLocation, false))
+        std::pair<int, int> otherLocationToCheck = {newLocation.first, newLocation.second + (isWhite ? -1 : 1)};
+        if (pair.second == (isWhite ? 1 : 6) && not isTileOccupiedByColor(newLocation, true)
+            && not isTileOccupiedByColor(newLocation, false) && not isTileOccupiedByColor(otherLocationToCheck, true) &&
+            not isTileOccupiedByColor(otherLocationToCheck, false))
         {
             moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
             continue;
@@ -367,11 +369,11 @@ std::vector<Move> Board::generateAllKingMoves(bool isWhite)
         {
             for (int k = -1; k < 2; k++)
             {
-                if (i == 0 && k == 0)
+                std::pair<int, int> newLocation = {pair.first + i, pair.second + k};
+                if (i == 0 && k == 0 || not isPosInsideBoard(newLocation))
                 {
                     continue;
                 }
-                std::pair<int, int> newLocation = {pair.first + i, pair.second + k};
                 if (isTileOccupiedByColor(newLocation, true))
                 {
                     continue;
@@ -394,6 +396,10 @@ std::vector<Move> Board::generateRookMovesFromLocation(std::pair<int, int> pair,
             continue;
         }
         std::pair<int, int> newLocation = {pair.first + i, pair.second};
+        if (not isPosInsideBoard(newLocation))
+        {
+            continue;
+        }
         if (isTileOccupiedByColor(newLocation, true))
         {
             break;
@@ -427,21 +433,26 @@ std::vector<Move> Board::generateRookMovesFromLocation(std::pair<int, int> pair,
 std::vector<Move> Board::generateBishopMovesFromLocation(std::pair<int, int> pair, bool isWhite)
 {
     std::vector<Move> moves;
-    for (int i = -8; i < 8; i++)
+    std::pair<int, int> directions[] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+
+    for (const auto& direction : directions)
     {
-        std::pair<int, int> newLocation = {pair.first + i, pair.second + i};
-        if (i == 0 || isPosInsideBoard(newLocation))
+        for (int i = 1; i < 8; ++i)
         {
-            continue;
-        }
-        if (isTileOccupiedByColor(newLocation, true))
-        {
-            break;
-        }
-        moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
-        if (isTileOccupiedByColor(newLocation, false))
-        {
-            break;
+            std::pair<int, int> newLocation = {pair.first + i * direction.first, pair.second + i * direction.second};
+            if (!isPosInsideBoard(newLocation))
+            {
+                break;
+            }
+            if (isTileOccupiedByColor(newLocation, isWhite))
+            {
+                break;
+            }
+            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            if (isTileOccupiedByColor(newLocation, !isWhite))
+            {
+                break;
+            }
         }
     }
     return moves;
