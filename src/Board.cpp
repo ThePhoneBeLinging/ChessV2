@@ -247,7 +247,7 @@ std::vector<Move> Board::generateAllRookMoves(bool isWhite)
 {
     std::vector<Move> moves;
 
-    auto locationOfPieces = getAllPieces(Pieces::Pawn, isWhite);
+    auto locationOfPieces = getAllPieces(Pieces::Rook, isWhite);
     for (auto& pair : locationOfPieces)
     {
         for (int i = -pair.first; i < 8 - pair.first; i++)
@@ -292,7 +292,7 @@ std::vector<Move> Board::generateAllKnightMoves(bool isWhite)
 {
     std::vector<Move> moves;
 
-    auto locationOfPieces = getAllPieces(Pieces::Pawn, isWhite);
+    auto locationOfPieces = getAllPieces(Pieces::Knight, isWhite);
 
     for (auto& pair : locationOfPieces)
     {
@@ -323,6 +323,31 @@ std::vector<Move> Board::generateAllKnightMoves(bool isWhite)
 
 std::vector<Move> Board::generateAllBishopMoves(bool isWhite)
 {
+    std::vector<Move> moves;
+    auto locationOfPieces = getAllPieces(Pieces::Bishop, isWhite);
+
+    for (auto& pair : locationOfPieces)
+    {
+        for (int i = -8; i < 8; i++)
+        {
+            std::pair<int, int> newLocation = {pair.first + i, pair.second + i};
+            if (i == 0 || isPosInsideBoard(newLocation))
+            {
+                continue;
+            }
+            if (isTileOccupiedByColor(newLocation, true))
+            {
+                break;
+            }
+            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            if (isTileOccupiedByColor(newLocation, false))
+            {
+                break;
+            }
+        }
+    }
+
+    return moves;
 }
 
 std::vector<Move> Board::generateAllQueenMoves(bool isWhite)
