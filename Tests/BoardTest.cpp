@@ -80,6 +80,18 @@ TEST_F(BoardTest, InitialBoardPositions)
     EXPECT_EQ(board->getAllPieces(Pieces::King, false), expectedBlackKing);
 }
 
+TEST_F(BoardTest, GetBitBoardFromLocation)
+{
+    // Check if the bitboard for the location (0, 0) is correct
+    EXPECT_EQ(board->getBitBoardFromLocation({0, 0}), 1);
+    // Check if the bitboard for the location (1, 0) is correct
+    EXPECT_EQ(board->getBitBoardFromLocation({1, 0}), 2);
+    // Check if the bitboard for the location (0, 1) is correct
+    EXPECT_EQ(board->getBitBoardFromLocation({0, 1}), 256);
+    // Check if the bitboard for the location (1, 1) is correct
+    EXPECT_EQ(board->getBitBoardFromLocation({1, 1}), 512);
+}
+
 int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
