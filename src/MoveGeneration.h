@@ -9,12 +9,12 @@ class Board;
 class MoveGeneration
 {
 public:
-    static std::vector<Move> generatePawnMoves(const Board& board, bool isWhite);
-    static std::vector<Move> generateRookMoves(const Board& board, bool isWhite);
-    static std::vector<Move> generateKnightMoves(const Board& board, bool isWhite);
-    static std::vector<Move> generateBishopMoves(const Board& board, bool isWhite);
-    static std::vector<Move> generateQueenMoves(const Board& board, bool isWhite);
-    static std::vector<Move> generateKingMoves(const Board& board, bool isWhite);
+    static std::vector<Move> generatePawnMoves(uint64_t sameColorPieces, uint64_t isWhitePawns);
+    static std::vector<Move> generateRookMoves(uint64_t sameColorPieces, uint64_t isWhiteRooks);
+    static std::vector<Move> generateKnightMoves(uint64_t sameColorPieces, uint64_t isWhiteKnights);
+    static std::vector<Move> generateBishopMoves(uint64_t sameColorPieces, uint64_t isWhiteBishops);
+    static std::vector<Move> generateQueenMoves(uint64_t sameColorPieces, uint64_t isWhiteQueens);
+    static std::vector<Move> generateKingMoves(uint64_t sameColorPieces, uint64_t isWhiteKing);
 };
 
 #endif // MOVEGENERATION_H

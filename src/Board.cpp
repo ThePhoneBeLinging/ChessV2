@@ -35,22 +35,30 @@ std::vector<Move> Board::generateAllLegalMoves(bool isWhite)
     std::vector<Move> allMoves;
     std::vector<Move> pseudoLegalMoves;
 
-    pseudoLegalMoves = MoveGeneration::generatePawnMoves(*this, isWhite);
+    uint64_t coloredBitBoard = isWhite ? getWhiteBitBoard() : getBlackBitBoard();
+
+    pseudoLegalMoves = MoveGeneration::generatePawnMoves(coloredBitBoard,
+                                                         isWhite ? whitePawnsBitBoard_ : blackPawnsBitBoard_);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
-    pseudoLegalMoves = MoveGeneration::generateRookMoves(*this, isWhite);
+    pseudoLegalMoves = MoveGeneration::generateRookMoves(coloredBitBoard,
+                                                         isWhite ? whiteRooksBitBoard_ : blackRooksBitBoard_);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
-    pseudoLegalMoves = MoveGeneration::generateKnightMoves(*this, isWhite);
+    pseudoLegalMoves = MoveGeneration::generateKnightMoves(coloredBitBoard,
+                                                           isWhite ? whiteKnightsBitBoard_ : blackKnightsBitBoard_);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
-    pseudoLegalMoves = MoveGeneration::generateBishopMoves(*this, isWhite);
+    pseudoLegalMoves = MoveGeneration::generateBishopMoves(coloredBitBoard,
+                                                           isWhite ? whiteBishopsBitBoard_ : blackBishopsBitBoard_);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
-    pseudoLegalMoves = MoveGeneration::generateQueenMoves(*this, isWhite);
+    pseudoLegalMoves = MoveGeneration::generateQueenMoves(coloredBitBoard,
+                                                          isWhite ? whiteQueensBitBoard_ : blackQueensBitBoard_);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
-    pseudoLegalMoves = MoveGeneration::generateKingMoves(*this, isWhite);
+    pseudoLegalMoves = MoveGeneration::generateKingMoves(coloredBitBoard,
+                                                         isWhite ? whiteKingBitBoard_ : blackKingBitBoard_);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
     // Filter out illegal moves
@@ -169,6 +177,18 @@ void Board::drawBoard()
             });
         }
     }
+}
+
+uint64_t Board::getWhiteBitBoard() const
+{
+    return whitePawnsBitBoard_ | whiteRooksBitBoard_ | whiteKnightsBitBoard_ | whiteBishopsBitBoard_ |
+        whiteQueensBitBoard_ | whiteKingBitBoard_;
+}
+
+uint64_t Board::getBlackBitBoard() const
+{
+    return blackPawnsBitBoard_ | blackRooksBitBoard_ | blackKnightsBitBoard_ | blackBishopsBitBoard_ |
+        blackQueensBitBoard_ | blackKingBitBoard_;
 }
 
 bool Board::isMoveLegal(const Move& move, bool isWhite)

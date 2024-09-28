@@ -20,6 +20,9 @@ public:
     std::vector<std::pair<int, int>> getAllPieces(Pieces piece, bool isWhite);
     void drawBoard();
 
+    [[nodiscard]] uint64_t getWhiteBitBoard() const;
+    [[nodiscard]] uint64_t getBlackBitBoard() const;
+
 private:
     bool isMoveLegal(const Move& move, bool isWhite);
     uint64_t whitePawnsBitBoard_;
