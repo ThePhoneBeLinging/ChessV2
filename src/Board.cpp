@@ -322,6 +322,31 @@ std::vector<Move> Board::generateAllQueenMoves(bool isWhite)
 
 std::vector<Move> Board::generateAllKingMoves(bool isWhite)
 {
+    std::vector<Move> moves;
+
+    auto locationOfPieces = getAllPieces(Pieces::Queen, isWhite);
+
+    for (auto& pair : locationOfPieces)
+    {
+        for (int i = -1; i < 2; i++)
+        {
+            for (int k = -1; k < 2; k++)
+            {
+                if (i == 0 && k == 0)
+                {
+                    continue;
+                }
+                std::pair<int, int> newLocation = {pair.first + i, pair.second + k};
+                if (isTileOccupiedByColor(newLocation, true))
+                {
+                    continue;
+                }
+                moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            }
+        }
+    }
+
+    return moves;
 }
 
 std::vector<Move> Board::generateRookMovesFromLocation(std::pair<int, int> pair, bool isWhite)
