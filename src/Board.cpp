@@ -245,6 +245,47 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
 
 std::vector<Move> Board::generateAllRookMoves(bool isWhite)
 {
+    std::vector<Move> moves;
+
+    auto locationOfPieces = getAllPieces(Pieces::Pawn, isWhite);
+    for (auto& pair : locationOfPieces)
+    {
+        for (int i = -pair.first; i < 8 - pair.first; i++)
+        {
+            if (i == 0)
+            {
+                continue;
+            }
+            std::pair<int, int> newLocation = {pair.first + i, pair.second};
+            if (isTileOccupiedByColor(newLocation, true))
+            {
+                break;
+            }
+            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            if (isTileOccupiedByColor(newLocation, false))
+            {
+                break;
+            }
+        }
+        for (int i = -pair.second; i < 8 - pair.second; i++)
+        {
+            if (i == 0)
+            {
+                continue;
+            }
+            std::pair<int, int> newLocation = {pair.first, pair.second + i};
+            if (isTileOccupiedByColor(newLocation, true))
+            {
+                break;
+            }
+            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            if (isTileOccupiedByColor(newLocation, false))
+            {
+                break;
+            }
+        }
+        return moves;
+    }
 }
 
 std::vector<Move> Board::generateAllKnightMoves(bool isWhite)
