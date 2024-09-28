@@ -374,7 +374,7 @@ std::vector<Move> Board::generateAllKingMoves(bool isWhite)
                 {
                     continue;
                 }
-                if (isTileOccupiedByColor(newLocation, true))
+                if (isTileOccupiedByColor(newLocation, isWhite))
                 {
                     continue;
                 }
@@ -400,12 +400,12 @@ std::vector<Move> Board::generateRookMovesFromLocation(std::pair<int, int> pair,
         {
             continue;
         }
-        if (isTileOccupiedByColor(newLocation, true))
+        if (isTileOccupiedByColor(newLocation, isWhite))
         {
             break;
         }
         moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
-        if (isTileOccupiedByColor(newLocation, false))
+        if (isTileOccupiedByColor(newLocation, not isWhite))
         {
             break;
         }
