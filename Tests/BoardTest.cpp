@@ -92,6 +92,28 @@ TEST_F(BoardTest, GetBitBoardFromLocation)
     EXPECT_EQ(board->getBitBoardFromLocation({1, 1}), 512);
 }
 
+TEST_F(BoardTest, IsPosInsideBoard)
+{
+    // Check if the position (0, 0) is inside the board
+    EXPECT_TRUE(board->isPosInsideBoard({0, 0}));
+    // Check if the position (7, 0) is inside the board
+    EXPECT_TRUE(board->isPosInsideBoard({7, 0}));
+    // Check if the position (0, 7) is inside the board
+    EXPECT_TRUE(board->isPosInsideBoard({0, 7}));
+    // Check if the position (7, 7) is inside the board
+    EXPECT_TRUE(board->isPosInsideBoard({7, 7}));
+    // Check if the position (-1, 0) is inside the board
+    EXPECT_FALSE(board->isPosInsideBoard({-1, 0}));
+    // Check if the position (0, -1) is inside the board
+    EXPECT_FALSE(board->isPosInsideBoard({0, -1}));
+    // Check if the position (8, 0) is inside the board
+    EXPECT_FALSE(board->isPosInsideBoard({8, 0}));
+    // Check if the position (0, 8) is inside the board
+    EXPECT_FALSE(board->isPosInsideBoard({0, 8}));
+}
+
+
+
 int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

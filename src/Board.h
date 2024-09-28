@@ -23,12 +23,12 @@ public:
 
     [[nodiscard]] uint64_t getWhiteBitBoard() const;
     [[nodiscard]] uint64_t getBlackBitBoard() const;
+    static bool isPosInsideBoard(std::pair<int, int> location);
 
 private:
     bool isMoveLegal(const Move& move, bool isWhite);
     [[nodiscard]] bool isTileOccupiedByColor(std::pair<int, int> location, bool isWhite) const;
 
-    static bool isPosInsideBoard(std::pair<int, int> location);
 
     std::vector<Move> generateAllPawnMoves(bool isWhite);
     std::vector<Move> generateAllRookMoves(bool isWhite);
