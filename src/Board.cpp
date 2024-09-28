@@ -255,17 +255,15 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
             && isPosInsideBoard(newLocation))
         {
             moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
-            continue;
         }
         // Check if the pawn can move two steps forward
         newLocation.second += (isWhite ? 1 : -1);
         std::pair<int, int> otherLocationToCheck = {newLocation.first, newLocation.second + (isWhite ? -1 : 1)};
         if (pair.second == (isWhite ? 1 : 6) && not isTileOccupiedByColor(newLocation, true)
             && not isTileOccupiedByColor(newLocation, false) && not isTileOccupiedByColor(otherLocationToCheck, true) &&
-            not isTileOccupiedByColor(otherLocationToCheck, false))
+            not isTileOccupiedByColor(otherLocationToCheck, false) && isPosInsideBoard(newLocation))
         {
             moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
-            continue;
         }
         // Resets newLocation
         newLocation = {pair.first, pair.second};
@@ -274,7 +272,6 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
         if (isTileOccupiedByColor(newLocation, false) && isPosInsideBoard(newLocation))
         {
             moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
-            continue;
         }
     }
     return moves;
@@ -315,7 +312,12 @@ std::vector<Move> Board::generateAllKnightMoves(bool isWhite)
 
         for (auto& newLocation : possibleMoves)
         {
-            if (isTileOccupiedByColor(newLocation, true))
+            if (not isPosInsideBoard(newLocation))
+            {
+                continue;
+            }
+
+            if (isTileOccupiedByColor(newLocation, isWhite))
             {
                 continue;
             }
