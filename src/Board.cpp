@@ -290,6 +290,35 @@ std::vector<Move> Board::generateAllRookMoves(bool isWhite)
 
 std::vector<Move> Board::generateAllKnightMoves(bool isWhite)
 {
+    std::vector<Move> moves;
+
+    auto locationOfPieces = getAllPieces(Pieces::Pawn, isWhite);
+
+    for (auto& pair : locationOfPieces)
+    {
+        std::vector<std::pair<int, int>> possibleMoves =
+        {
+            {pair.first + 1, pair.second + 2},
+            {pair.first + 1, pair.second - 2},
+            {pair.first - 1, pair.second + 2},
+            {pair.first - 1, pair.second - 2},
+            {pair.first + 2, pair.second + 1},
+            {pair.first + 2, pair.second - 1},
+            {pair.first - 2, pair.second + 1},
+            {pair.first - 2, pair.second - 1}
+        };
+
+        for (auto& newLocation : possibleMoves)
+        {
+            if (isTileOccupiedByColor(newLocation, true))
+            {
+                continue;
+            }
+            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+        }
+    }
+
+    return moves;
 }
 
 std::vector<Move> Board::generateAllBishopMoves(bool isWhite)
