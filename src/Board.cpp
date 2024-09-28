@@ -35,30 +35,22 @@ std::vector<Move> Board::generateAllLegalMoves(bool isWhite)
     std::vector<Move> allMoves;
     std::vector<Move> pseudoLegalMoves;
 
-    uint64_t coloredBitBoard = isWhite ? getWhiteBitBoard() : getBlackBitBoard();
-
-    pseudoLegalMoves = MoveGeneration::generatePawnMoves(coloredBitBoard,
-                                                         isWhite ? whitePawnsBitBoard_ : blackPawnsBitBoard_);
+    pseudoLegalMoves = generateAllPawnMoves(isWhite);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
-    pseudoLegalMoves = MoveGeneration::generateRookMoves(coloredBitBoard,
-                                                         isWhite ? whiteRooksBitBoard_ : blackRooksBitBoard_);
+    pseudoLegalMoves = generateAllRookMoves(isWhite);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
-    pseudoLegalMoves = MoveGeneration::generateKnightMoves(coloredBitBoard,
-                                                           isWhite ? whiteKnightsBitBoard_ : blackKnightsBitBoard_);
+    pseudoLegalMoves = generateAllKnightMoves(isWhite);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
-    pseudoLegalMoves = MoveGeneration::generateBishopMoves(coloredBitBoard,
-                                                           isWhite ? whiteBishopsBitBoard_ : blackBishopsBitBoard_);
+    pseudoLegalMoves = generateAllBishopMoves(isWhite);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
-    pseudoLegalMoves = MoveGeneration::generateQueenMoves(coloredBitBoard,
-                                                          isWhite ? whiteQueensBitBoard_ : blackQueensBitBoard_);
+    pseudoLegalMoves = generateAllQueenMoves(isWhite);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
-    pseudoLegalMoves = MoveGeneration::generateKingMoves(coloredBitBoard,
-                                                         isWhite ? whiteKingBitBoard_ : blackKingBitBoard_);
+    pseudoLegalMoves = generateAllKingMoves(isWhite);
     allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
 
     // Filter out illegal moves
@@ -113,6 +105,11 @@ std::vector<std::pair<int, int>> Board::getAllPieces(Pieces piece, bool isWhite)
         }
     }
     return locations;
+}
+
+uint64_t Board::getNumberFromLocation(std::pair<int, int> location)
+{
+    return 1ULL << (location.first + location.second * 8);
 }
 
 void Board::drawBoard()
@@ -195,4 +192,70 @@ bool Board::isMoveLegal(const Move& move, bool isWhite)
 {
     // TODO Implement logic to check if a move is legal (does not leave the king in check)
     return true;
+}
+
+bool Board::isTileOccupiedByColor(std::pair<int, int> location, bool isWhite) const
+{
+    auto bitBoardOfPos = getNumberFromLocation(location);
+    auto bitBoardOfColor = isWhite ? getWhiteBitBoard() : getBlackBitBoard();
+    return bitBoardOfPos & bitBoardOfColor;
+}
+
+bool Board::isPosInsideBoard(std::pair<int, int> location)
+{
+    return location.first >= 0 && location.first < 8 && location.second >= 0 && location.second < 8;
+}
+
+std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
+{
+    std::vector<Move> moves;
+    auto locationOfPieces = getAllPieces(Pieces::Pawn, isWhite);
+    for (auto& pair : locationOfPieces)
+    {
+        std::vector<std::pair<int, int>> legalPositions;
+        std::pair<int, int> newLocation = {pair.first, pair.second};
+        // Check if the pawn can move one step forward
+        newLocation.second += (isWhite ? 1 : -1);
+        if (not isTileOccupiedByColor(newLocation, true) && not isTileOccupiedByColor(newLocation, false)
+            && isPosInsideBoard(newLocation))
+        {
+            legalPositions.push_back(newLocation);
+        }
+        // Check if the pawn can move two steps forward
+        newLocation.second += (isWhite ? 1 : -1);
+        if (pair.first == (isWhite ? 1 : 6) && not isTileOccupiedByColor(newLocation, true)
+            && not isTileOccupiedByColor(newLocation, false))
+        {
+            legalPositions.push_back(newLocation);
+        }
+        // Resets newLocation
+        newLocation = {pair.first, pair.second};
+        // Check if the pawn can capture a piece
+        newLocation = {pair.first + (isWhite ? 1 : -1), pair.second + (isWhite ? 1 : -1)};
+        if (isTileOccupiedByColor(newLocation, false) && isPosInsideBoard(newLocation))
+        {
+            legalPositions.push_back(newLocation);
+        }
+    }
+    return moves;
+}
+
+std::vector<Move> Board::generateAllRookMoves(bool isWhite)
+{
+}
+
+std::vector<Move> Board::generateAllKnightMoves(bool isWhite)
+{
+}
+
+std::vector<Move> Board::generateAllBishopMoves(bool isWhite)
+{
+}
+
+std::vector<Move> Board::generateAllQueenMoves(bool isWhite)
+{
+}
+
+std::vector<Move> Board::generateAllKingMoves(bool isWhite)
+{
 }

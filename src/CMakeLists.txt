@@ -9,8 +9,6 @@ add_executable(ChessV2 main.cpp
         Board.cpp
         Board.h
         Move.h
-        MoveGeneration.cpp
-        MoveGeneration.h
         Pieces.h
         Texture/TextureIndices.h
         Texture/TextureLoader.cpp
