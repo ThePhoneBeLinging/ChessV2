@@ -284,8 +284,8 @@ std::vector<Move> Board::generateAllRookMoves(bool isWhite)
                 break;
             }
         }
-        return moves;
     }
+    return moves;
 }
 
 std::vector<Move> Board::generateAllKnightMoves(bool isWhite)
