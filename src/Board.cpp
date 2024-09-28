@@ -176,6 +176,41 @@ void Board::drawBoard()
     }
 }
 
+void Board::executeMove(Move move)
+{
+    // TODO Could speed this by taking color as an argument
+    uint64_t fromBitBoard = move.from;
+    uint64_t toBitBoard = move.to;
+
+    // Determine which piece is moving
+    uint64_t* bitBoards[] = {
+        &whitePawnsBitBoard_, &whiteRooksBitBoard_, &whiteKnightsBitBoard_,
+        &whiteBishopsBitBoard_, &whiteQueensBitBoard_, &whiteKingBitBoard_,
+        &blackPawnsBitBoard_, &blackRooksBitBoard_, &blackKnightsBitBoard_,
+        &blackBishopsBitBoard_, &blackQueensBitBoard_, &blackKingBitBoard_
+    };
+
+    for (auto& bitBoard : bitBoards)
+    {
+        if (*bitBoard & fromBitBoard)
+        {
+            *bitBoard &= ~fromBitBoard; // Remove piece from the original position
+            *bitBoard |= toBitBoard; // Place piece at the new position
+            break;
+        }
+    }
+
+    // If the move captures an opponent's piece, remove it from the board
+    for (auto& bitBoard : bitBoards)
+    {
+        if (*bitBoard & toBitBoard)
+        {
+            *bitBoard &= ~toBitBoard;
+            break;
+        }
+    }
+}
+
 uint64_t Board::getWhiteBitBoard() const
 {
     return whitePawnsBitBoard_ | whiteRooksBitBoard_ | whiteKnightsBitBoard_ | whiteBishopsBitBoard_ |

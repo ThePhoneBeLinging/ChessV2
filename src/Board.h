@@ -19,7 +19,7 @@ public:
     std::vector<std::pair<int, int>> getAllPieces(Pieces piece, bool isWhite);
     static uint64_t getBitBoardFromLocation(std::pair<int, int> location);
     void drawBoard();
-
+    void executeMove(Move move);
 
     [[nodiscard]] uint64_t getWhiteBitBoard() const;
     [[nodiscard]] uint64_t getBlackBitBoard() const;
