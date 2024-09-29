@@ -170,22 +170,22 @@ void Board::executeMove(Move move)
         &blackBishopsBitBoard_, &blackQueensBitBoard_, &blackKingBitBoard_
     };
 
-    for (auto& bitBoard : bitBoards)
-    {
-        if (*bitBoard & fromBitBoard)
-        {
-            *bitBoard &= ~fromBitBoard; // Remove piece from the original position
-            *bitBoard |= toBitBoard; // Place piece at the new position
-            break;
-        }
-    }
-
     // If the move captures an opponent's piece, remove it from the board
     for (auto& bitBoard : bitBoards)
     {
         if (*bitBoard & toBitBoard)
         {
             *bitBoard &= ~toBitBoard;
+            break;
+        }
+    }
+
+    for (auto& bitBoard : bitBoards)
+    {
+        if (*bitBoard & fromBitBoard)
+        {
+            *bitBoard &= ~fromBitBoard; // Remove piece from the original position
+            *bitBoard |= toBitBoard; // Place piece at the new position
             break;
         }
     }
@@ -299,10 +299,17 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
         // Resets newLocation
         newLocation = {pair.first, pair.second};
         // Check if the pawn can capture a piece
-        newLocation = {pair.first + (isWhite ? 1 : -1), pair.second + (isWhite ? 1 : -1)};
-        if (isTileOccupiedByColor(newLocation, false) && isPosInsideBoard(newLocation))
+        for (int i = -1; i < 2; i++)
         {
-            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            if (i == 0)
+            {
+                continue;
+            }
+            newLocation = {pair.first + i, pair.second + (isWhite ? 1 : -1)};
+            if (isTileOccupiedByColor(newLocation, false) && isPosInsideBoard(newLocation))
+            {
+                moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            }
         }
     }
     return moves;
