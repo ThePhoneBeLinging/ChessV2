@@ -6,20 +6,19 @@
 
 int DepthSearch::initializeSearch(Board& board, bool isWhite, int depth)
 {
-    amountOfNodesSearched_ = 0;
     return searchRecursive(board, isWhite, depth);
 }
 
-int DepthSearch::getAmountOfNodesSearched()
+int DepthSearch::countPositionsAtDepth(int depth)
 {
-    return amountOfNodesSearched_;
+    Board board = Board();
+    return recursiveCountPositionsAtDepth(board, true, depth);
 }
 
 int DepthSearch::searchRecursive(Board board, bool isWhite, int depth)
 {
     if (depth == 0)
     {
-        amountOfNodesSearched_++;
         return 1;
     }
     int max = INT32_MAX;
@@ -40,4 +39,20 @@ int DepthSearch::searchRecursive(Board board, bool isWhite, int depth)
     }
 
     return isWhite ? max : min;
+}
+
+int DepthSearch::recursiveCountPositionsAtDepth(Board board, bool isWhite, int depth)
+{
+    if (depth == 0)
+    {
+        return 1;
+    }
+    int count = 0;
+    for (auto& move : board.generateAllLegalMoves(isWhite))
+    {
+        auto newBoard = Board(board);
+        newBoard.executeMove(move);
+        count += recursiveCountPositionsAtDepth(newBoard, not isWhite, depth - 1);
+    }
+    return count;
 }

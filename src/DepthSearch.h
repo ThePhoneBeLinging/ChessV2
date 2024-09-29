@@ -11,11 +11,11 @@ class DepthSearch
 {
 public:
     static int initializeSearch(Board& board, bool isWhite, int depth);
-    static int getAmountOfNodesSearched();
+    static int countPositionsAtDepth(int depth);
 
 private:
     static int searchRecursive(Board board, bool isWhite, int depth);
-    static inline int amountOfNodesSearched_ = 0;
+    static int recursiveCountPositionsAtDepth(Board board, bool isWhite, int depth);
 };
 
 

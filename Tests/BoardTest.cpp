@@ -123,14 +123,13 @@ TEST_F(BoardTest, GenerateAllLegalMoves)
 
 TEST_F(BoardTest, searchFunction)
 {
-    DepthSearch::initializeSearch(*board, true, 2);
-    EXPECT_EQ(DepthSearch::getAmountOfNodesSearched(), 400);
+    EXPECT_EQ(DepthSearch::countPositionsAtDepth(2), 400);
 
     DepthSearch::initializeSearch(*board, true, 3);
-    EXPECT_EQ(DepthSearch::getAmountOfNodesSearched(), 8902);
+    EXPECT_EQ(DepthSearch::countPositionsAtDepth(3), 8902);
 
     DepthSearch::initializeSearch(*board, true, 4);
-    EXPECT_EQ(DepthSearch::getAmountOfNodesSearched(), 197281);
+    EXPECT_EQ(DepthSearch::countPositionsAtDepth(4), 197281);
 }
 
 int main(int argc, char** argv)
