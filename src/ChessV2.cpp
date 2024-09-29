@@ -8,6 +8,7 @@
 #include "ChessV2.h"
 
 #include <iostream>
+#include <regex>
 #include <thread>
 #include "Board.h"
 #include "EngineBase/EngineBase.h"
@@ -15,6 +16,8 @@
 
 void ChessV2::launch()
 {
+    board_ = Board();
+    isWhite_ = true;
     for (int i = 0; i < 64; i++)
     {
         EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::WIDTH, TILESIZE});
@@ -57,8 +60,7 @@ void ChessV2::launch()
             EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX, 2});
         }
     }
-    auto board = Board();
-    board.drawBoard();
+    handleInput();
 }
 
 void ChessV2::update(float deltaTime)
@@ -66,7 +68,57 @@ void ChessV2::update(float deltaTime)
     // This is currently not needed for the chess game
 }
 
+void ChessV2::handleInput()
+{
+    while (not board_.generateAllLegalMoves(isWhite_).empty())
+    {
+        board_.drawBoard();
+        std::string input;
+        std::cin >> input;
+        makeMoveFromNotation(input);
+    }
+}
+
 std::pair<float, float> ChessV2::getDrawLocationFromTile(int x, int y)
 {
     return {LEFTMARGIN + (float)x * TILESIZE, TOPMARGIN + (float)y * TILESIZE};
+}
+
+void ChessV2::makeMoveFromNotation(const std::string& notation)
+{
+    std::regex moveRegex("([a-h][1-8])([a-h][1-8])");
+    std::smatch match;
+    auto legalMoves = board_.generateAllLegalMoves(isWhite_);
+    if (std::regex_match(notation, match, moveRegex))
+    {
+        std::string from = match[1];
+        std::string to = match[2];
+
+        int fromX = from[0] - 'a';
+        int fromY = from[1] - '1';
+        int toX = to[0] - 'a';
+        int toY = to[1] - '1';
+
+        std::pair<int, int> fromPos = {fromX, fromY};
+        std::pair<int, int> toPos = {toX, toY};
+        Move moveToMake = {Board::getBitBoardFromLocation(fromPos), Board::getBitBoardFromLocation(toPos)};
+
+        if (std::find_if(legalMoves.begin(), legalMoves.end(), [moveToMake](const Move& move)
+        {
+            return move.from == moveToMake.from && move.to == moveToMake.to;
+        }) != legalMoves.end())
+        {
+            board_.executeMove(moveToMake);
+            isWhite_ = not isWhite_;
+            std::cout << "Move made: " << notation << std::endl;
+        }
+        else
+        {
+            std::cout << "Invalid move: " << notation << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "Invalid notation: " << notation << std::endl;
+    }
 }
