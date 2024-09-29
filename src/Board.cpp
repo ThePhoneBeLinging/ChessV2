@@ -32,28 +32,8 @@ Board::Board()
 
 std::vector<Move> Board::generateAllLegalMoves(bool isWhite)
 {
-    std::vector<Move> allMoves;
-    std::vector<Move> pseudoLegalMoves;
-
-    pseudoLegalMoves = generateAllPawnMoves(isWhite);
-    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
-
-    pseudoLegalMoves = generateAllRookMoves(isWhite);
-    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
-
-    pseudoLegalMoves = generateAllKnightMoves(isWhite);
-    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
-
-    pseudoLegalMoves = generateAllBishopMoves(isWhite);
-    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
-
-    pseudoLegalMoves = generateAllQueenMoves(isWhite);
-    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
-
-    pseudoLegalMoves = generateAllKingMoves(isWhite);
-    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
-
     // Filter out illegal moves
+    std::vector<Move> allMoves = generatePseudoLegalMoves(isWhite);
     std::vector<Move> legalMoves;
     for (const Move& move : allMoves)
     {
@@ -225,8 +205,34 @@ uint64_t Board::getBlackBitBoard() const
 
 bool Board::isMoveLegal(const Move& move, bool isWhite)
 {
-    // TODO Implement logic to check if a move is legal (does not leave the king in check)
-    return true;
+    // Make the move on a temporary board
+    auto tempBoard = Board(*this);
+    tempBoard.executeMove(move);
+
+    // Check if the king is in check after the move
+    std::pair<int, int> kingPosition;
+    auto kingLocations = tempBoard.getAllPieces(Pieces::King, isWhite);
+    if (!kingLocations.empty())
+    {
+        kingPosition = kingLocations[0];
+    }
+    else
+    {
+        // No king found, which should not happen in a legal game state
+        return false;
+    }
+
+    // Check if any opponent piece can attack the king
+    auto opponentMoves = tempBoard.generatePseudoLegalMoves(!isWhite);
+    for (const auto& opponentMove : opponentMoves)
+    {
+        if (opponentMove.to == tempBoard.getBitBoardFromLocation(kingPosition))
+        {
+            return false; // King is in check
+        }
+    }
+
+    return true; // Move is legal
 }
 
 bool Board::isTileOccupiedByColor(std::pair<int, int> location, bool isWhite) const
@@ -239,6 +245,31 @@ bool Board::isTileOccupiedByColor(std::pair<int, int> location, bool isWhite) co
 bool Board::isPosInsideBoard(std::pair<int, int> location)
 {
     return location.first >= 0 && location.first < 8 && location.second >= 0 && location.second < 8;
+}
+
+std::vector<Move> Board::generatePseudoLegalMoves(bool isWhite)
+{
+    std::vector<Move> allMoves;
+    std::vector<Move> pseudoLegalMoves;
+
+    pseudoLegalMoves = generateAllPawnMoves(isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+
+    pseudoLegalMoves = generateAllRookMoves(isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+
+    pseudoLegalMoves = generateAllKnightMoves(isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+
+    pseudoLegalMoves = generateAllBishopMoves(isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+
+    pseudoLegalMoves = generateAllQueenMoves(isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+
+    pseudoLegalMoves = generateAllKingMoves(isWhite);
+    allMoves.insert(allMoves.end(), pseudoLegalMoves.begin(), pseudoLegalMoves.end());
+    return allMoves;
 }
 
 std::vector<Move> Board::generateAllPawnMoves(bool isWhite)

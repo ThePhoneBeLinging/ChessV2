@@ -4,6 +4,7 @@
 
 #include <gtest/gtest.h>
 #include "../src/Board.h"  // Include your Board class header
+#include "../src/DepthSearch.h"
 
 class BoardTest : public ::testing::Test
 {
@@ -118,6 +119,18 @@ TEST_F(BoardTest, GenerateAllLegalMoves)
     EXPECT_EQ(board->generateAllLegalMoves(true).size(), 20);
     // Check if the number of legal moves for black is correct
     EXPECT_EQ(board->generateAllLegalMoves(false).size(), 20);
+}
+
+TEST_F(BoardTest, searchFunction)
+{
+    DepthSearch::initializeSearch(*board, true, 2);
+    EXPECT_EQ(DepthSearch::getAmountOfNodesSearched(), 400);
+
+    DepthSearch::initializeSearch(*board, true, 3);
+    EXPECT_EQ(DepthSearch::getAmountOfNodesSearched(), 8902);
+
+    DepthSearch::initializeSearch(*board, true, 4);
+    EXPECT_EQ(DepthSearch::getAmountOfNodesSearched(), 197281);
 }
 
 int main(int argc, char** argv)

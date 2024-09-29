@@ -7,6 +7,7 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 set(SOURCES
         ../src/Board.cpp
+        ../src/DepthSearch.cpp
         BoardTest.cpp
         # Add other source files here
 )

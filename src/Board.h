@@ -26,7 +26,8 @@ public:
     static bool isPosInsideBoard(std::pair<int, int> location);
 
 private:
-    bool isMoveLegal(const Move& move, bool isWhite);
+    std::vector<Move> generatePseudoLegalMoves(bool isWhite);
+    [[nodiscard]] bool isMoveLegal(const Move& move, bool isWhite);
     [[nodiscard]] bool isTileOccupiedByColor(std::pair<int, int> location, bool isWhite) const;
 
 
