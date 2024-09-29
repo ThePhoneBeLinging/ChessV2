@@ -394,7 +394,7 @@ std::vector<Move> Board::generateAllKingMoves(bool isWhite)
 {
     std::vector<Move> moves;
 
-    auto locationOfPieces = getAllPieces(Pieces::Queen, isWhite);
+    auto locationOfPieces = getAllPieces(Pieces::King, isWhite);
 
     for (auto& pair : locationOfPieces)
     {
@@ -422,42 +422,26 @@ std::vector<Move> Board::generateAllKingMoves(bool isWhite)
 std::vector<Move> Board::generateRookMovesFromLocation(std::pair<int, int> pair, bool isWhite)
 {
     std::vector<Move> moves;
-    for (int i = -pair.first; i < 8 - pair.first; i++)
+    std::pair<int, int> directions[] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    for (const auto& direction : directions)
     {
-        if (i == 0)
+        for (int i = 1; i < 8; ++i)
         {
-            continue;
-        }
-        std::pair<int, int> newLocation = {pair.first + i, pair.second};
-        if (not isPosInsideBoard(newLocation))
-        {
-            continue;
-        }
-        if (isTileOccupiedByColor(newLocation, isWhite))
-        {
-            break;
-        }
-        moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
-        if (isTileOccupiedByColor(newLocation, not isWhite))
-        {
-            break;
-        }
-    }
-    for (int i = -pair.second; i < 8 - pair.second; i++)
-    {
-        if (i == 0)
-        {
-            continue;
-        }
-        std::pair<int, int> newLocation = {pair.first, pair.second + i};
-        if (isTileOccupiedByColor(newLocation, true))
-        {
-            break;
-        }
-        moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
-        if (isTileOccupiedByColor(newLocation, false))
-        {
-            break;
+            std::pair<int, int> newLocation = {pair.first + i * direction.first, pair.second + i * direction.second};
+            if (!isPosInsideBoard(newLocation))
+            {
+                break;
+            }
+            if (isTileOccupiedByColor(newLocation, isWhite))
+            {
+                break;
+            }
+            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            if (isTileOccupiedByColor(newLocation, !isWhite))
+            {
+                break;
+            }
         }
     }
     return moves;
