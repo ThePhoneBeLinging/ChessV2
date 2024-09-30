@@ -15,6 +15,9 @@ add_executable(ChessV2 main.cpp
         Texture/TextureLoader.h
         DepthSearch.cpp
         DepthSearch.h
+        DraggedPiece.cpp
+        DraggedPiece.h
+        BoardValues.h
 )
 
 target_link_libraries(ChessV2 PUBLIC

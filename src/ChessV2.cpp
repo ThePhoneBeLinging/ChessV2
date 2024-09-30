@@ -2,9 +2,7 @@
 // Created by Elias Aggergaard Larsen on 26/09/2024.
 //
 
-#define TILESIZE 75
-#define LEFTMARGIN 50
-#define TOPMARGIN 50
+
 
 #include "ChessV2.h"
 
@@ -14,6 +12,7 @@
 #include "Board.h"
 #include "EngineBase/EngineBase.h"
 #include "Texture/TextureIndices.h"
+#include "BoardValues.h"
 
 void ChessV2::launch()
 {
