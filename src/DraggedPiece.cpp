@@ -8,7 +8,7 @@
 
 DraggedPiece::DraggedPiece(uint64_t fromLocation)
 {
-    fromLocation = fromLocation;
+    fromLocation_ = fromLocation;
     int position = 0;
     while ((fromLocation & 1) == 0)
     {
@@ -17,7 +17,7 @@ DraggedPiece::DraggedPiece(uint64_t fromLocation)
     }
     idToUpdate_ = position;
     location_ = EngineBase::getMousePosition();
-    offset_ = std::make_pair(location_.first % TILESIZE, location_.second % TILESIZE);
+    offset_ = std::make_pair((location_.first - LEFTMARGIN) % TILESIZE, (location_.second - TOPMARGIN) % TILESIZE);
 }
 
 uint64_t DraggedPiece::updateLocation()

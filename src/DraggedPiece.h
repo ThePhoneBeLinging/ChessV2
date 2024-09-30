@@ -12,7 +12,7 @@
 class DraggedPiece
 {
 public:
-    DraggedPiece(uint64_t fromLocation);
+    explicit DraggedPiece(uint64_t fromLocation);
 
     uint64_t updateLocation();
 
