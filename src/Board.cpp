@@ -11,6 +11,7 @@
 
 Board::Board()
 {
+    isWhite_ = true;
     // Initialize white pieces
     whitePawnsBitBoard_ = 0x000000000000FF00;
     whiteRooksBitBoard_ = 0x0000000000000081;
@@ -29,14 +30,14 @@ Board::Board()
 }
 
 
-std::vector<Move> Board::generateAllLegalMoves(bool isWhite)
+std::vector<Move> Board::generateAllLegalMoves()
 {
     // Filter out illegal moves
-    std::vector<Move> allMoves = generatePseudoLegalMoves(isWhite);
+    std::vector<Move> allMoves = generatePseudoLegalMoves(isWhite_);
     std::vector<Move> legalMoves;
-    for (const Move& move : allMoves)
+    for (const Move &move: allMoves)
     {
-        if (isMoveLegal(move, isWhite))
+        if (isMoveLegal(move, isWhite_))
         {
             legalMoves.push_back(move);
         }
@@ -50,26 +51,26 @@ std::vector<std::pair<int, int>> Board::getAllPieces(Pieces piece, bool isWhite)
     uint64_t bitBoard = 0;
     switch (piece)
     {
-    case Pieces::Pawn:
-        bitBoard = isWhite ? whitePawnsBitBoard_ : blackPawnsBitBoard_;
-        break;
-    case Pieces::Rook:
-        bitBoard = isWhite ? whiteRooksBitBoard_ : blackRooksBitBoard_;
-        break;
-    case Pieces::Knight:
-        bitBoard = isWhite ? whiteKnightsBitBoard_ : blackKnightsBitBoard_;
-        break;
-    case Pieces::Bishop:
-        bitBoard = isWhite ? whiteBishopsBitBoard_ : blackBishopsBitBoard_;
-        break;
-    case Pieces::Queen:
-        bitBoard = isWhite ? whiteQueensBitBoard_ : blackQueensBitBoard_;
-        break;
-    case Pieces::King:
-        bitBoard = isWhite ? whiteKingBitBoard_ : blackKingBitBoard_;
-        break;
-    default:
-        throw std::invalid_argument("Invalid piece type or color");
+        case Pieces::Pawn:
+            bitBoard = isWhite ? whitePawnsBitBoard_ : blackPawnsBitBoard_;
+            break;
+        case Pieces::Rook:
+            bitBoard = isWhite ? whiteRooksBitBoard_ : blackRooksBitBoard_;
+            break;
+        case Pieces::Knight:
+            bitBoard = isWhite ? whiteKnightsBitBoard_ : blackKnightsBitBoard_;
+            break;
+        case Pieces::Bishop:
+            bitBoard = isWhite ? whiteBishopsBitBoard_ : blackBishopsBitBoard_;
+            break;
+        case Pieces::Queen:
+            bitBoard = isWhite ? whiteQueensBitBoard_ : blackQueensBitBoard_;
+            break;
+        case Pieces::King:
+            bitBoard = isWhite ? whiteKingBitBoard_ : blackKingBitBoard_;
+            break;
+        default:
+            throw std::invalid_argument("Invalid piece type or color");
     }
 
     std::vector<std::pair<int, int>> locations;
@@ -97,9 +98,9 @@ void Board::drawBoard()
     for (int i = 0; i < 64; i++)
     {
         EngineBase::executeCommand({
-            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX,
-            (float)TextureIndices::EMPTY_BOARD_SQUARE
-        });
+                                           PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX,
+                                           (float) TextureIndices::EMPTY_BOARD_SQUARE
+                                   });
     }
     TextureIndices textureToUse = TextureIndices::EMPTY_BOARD_SQUARE;
     for (int i = 0; i < 12; i++)
@@ -108,49 +109,50 @@ void Board::drawBoard()
         std::vector<std::pair<int, int>> vectorOfPairs;
         switch (i % 6)
         {
-        case 0:
+            case 0:
             {
                 vectorOfPairs = getAllPieces(Pieces::Pawn, isWhite);
                 textureToUse = isWhite ? TextureIndices::WHITE_PAWN : TextureIndices::BLACK_PAWN;
                 break;
             }
-        case 1:
+            case 1:
             {
                 vectorOfPairs = getAllPieces(Pieces::Knight, isWhite);
                 textureToUse = isWhite ? TextureIndices::WHITE_KNIGHT : TextureIndices::BLACK_KNIGHT;
                 break;
             }
-        case 2:
+            case 2:
             {
                 vectorOfPairs = getAllPieces(Pieces::Bishop, isWhite);
                 textureToUse = isWhite ? TextureIndices::WHITE_BISHOP : TextureIndices::BLACK_BISHOP;
                 break;
             }
-        case 3:
+            case 3:
             {
                 vectorOfPairs = getAllPieces(Pieces::Rook, isWhite);
                 textureToUse = isWhite ? TextureIndices::WHITE_ROOK : TextureIndices::BLACK_ROOK;
                 break;
             }
-        case 4:
+            case 4:
             {
                 vectorOfPairs = getAllPieces(Pieces::King, isWhite);
                 textureToUse = isWhite ? TextureIndices::WHITE_KING : TextureIndices::BLACK_KING;
                 break;
             }
-        case 5:
+            case 5:
             {
                 vectorOfPairs = getAllPieces(Pieces::Queen, isWhite);
                 textureToUse = isWhite ? TextureIndices::WHITE_QUEEN : TextureIndices::BLACK_QUEEN;
                 break;
             }
         }
-        for (auto pairs : vectorOfPairs)
+        for (auto pairs: vectorOfPairs)
         {
             EngineBase::executeCommand({
-                PrimaryCMD::UPDATE, ObjectType::DRAWABLE, pairs.first + pairs.second * 8, SecondaryCMD::TEXTUREINDEX,
-                (float)textureToUse
-            });
+                                               PrimaryCMD::UPDATE, ObjectType::DRAWABLE, pairs.first + pairs.second * 8,
+                                               SecondaryCMD::TEXTUREINDEX,
+                                               (float) textureToUse
+                                       });
         }
     }
 }
@@ -162,15 +164,15 @@ void Board::executeMove(Move move)
     uint64_t toBitBoard = move.to;
 
     // Determine which piece is moving
-    uint64_t* bitBoards[] = {
-        &whitePawnsBitBoard_, &whiteRooksBitBoard_, &whiteKnightsBitBoard_,
-        &whiteBishopsBitBoard_, &whiteQueensBitBoard_, &whiteKingBitBoard_,
-        &blackPawnsBitBoard_, &blackRooksBitBoard_, &blackKnightsBitBoard_,
-        &blackBishopsBitBoard_, &blackQueensBitBoard_, &blackKingBitBoard_
+    uint64_t *bitBoards[] = {
+            &whitePawnsBitBoard_, &whiteRooksBitBoard_, &whiteKnightsBitBoard_,
+            &whiteBishopsBitBoard_, &whiteQueensBitBoard_, &whiteKingBitBoard_,
+            &blackPawnsBitBoard_, &blackRooksBitBoard_, &blackKnightsBitBoard_,
+            &blackBishopsBitBoard_, &blackQueensBitBoard_, &blackKingBitBoard_
     };
 
     // If the move captures an opponent's piece, remove it from the board
-    for (auto& bitBoard : bitBoards)
+    for (auto &bitBoard: bitBoards)
     {
         if (*bitBoard & toBitBoard)
         {
@@ -179,7 +181,7 @@ void Board::executeMove(Move move)
         }
     }
 
-    for (auto& bitBoard : bitBoards)
+    for (auto &bitBoard: bitBoards)
     {
         if (*bitBoard & fromBitBoard)
         {
@@ -188,21 +190,22 @@ void Board::executeMove(Move move)
             break;
         }
     }
+    isWhite_ = !isWhite_;
 }
 
 uint64_t Board::getWhiteBitBoard() const
 {
     return whitePawnsBitBoard_ | whiteRooksBitBoard_ | whiteKnightsBitBoard_ | whiteBishopsBitBoard_ |
-        whiteQueensBitBoard_ | whiteKingBitBoard_;
+           whiteQueensBitBoard_ | whiteKingBitBoard_;
 }
 
 uint64_t Board::getBlackBitBoard() const
 {
     return blackPawnsBitBoard_ | blackRooksBitBoard_ | blackKnightsBitBoard_ | blackBishopsBitBoard_ |
-        blackQueensBitBoard_ | blackKingBitBoard_;
+           blackQueensBitBoard_ | blackKingBitBoard_;
 }
 
-bool Board::isMoveLegal(const Move& move, bool isWhite)
+bool Board::isMoveLegal(const Move &move, bool isWhite)
 {
     // Make the move on a temporary board
     auto tempBoard = Board(*this);
@@ -223,7 +226,7 @@ bool Board::isMoveLegal(const Move& move, bool isWhite)
 
     // Check if any opponent piece can attack the king
     auto opponentMoves = tempBoard.generatePseudoLegalMoves(!isWhite);
-    for (const auto& opponentMove : opponentMoves)
+    for (const auto &opponentMove: opponentMoves)
     {
         if (opponentMove.to == tempBoard.getBitBoardFromLocation(kingPosition))
         {
@@ -275,7 +278,7 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
 {
     std::vector<Move> moves;
     auto locationOfPieces = getAllPieces(Pieces::Pawn, isWhite);
-    for (auto& pair : locationOfPieces)
+    for (auto &pair: locationOfPieces)
     {
         std::vector<std::pair<int, int>> legalPositions;
         std::pair<int, int> newLocation = {pair.first, pair.second};
@@ -319,7 +322,7 @@ std::vector<Move> Board::generateAllRookMoves(bool isWhite)
     std::vector<Move> moves;
 
     auto locationOfPieces = getAllPieces(Pieces::Rook, isWhite);
-    for (auto& pair : locationOfPieces)
+    for (auto &pair: locationOfPieces)
     {
         auto movesFromLocation = generateRookMovesFromLocation(pair, isWhite);
         moves.insert(moves.end(), movesFromLocation.begin(), movesFromLocation.end());
@@ -333,21 +336,21 @@ std::vector<Move> Board::generateAllKnightMoves(bool isWhite)
 
     auto locationOfPieces = getAllPieces(Pieces::Knight, isWhite);
 
-    for (auto& pair : locationOfPieces)
+    for (auto &pair: locationOfPieces)
     {
         std::vector<std::pair<int, int>> possibleMoves =
-        {
-            {pair.first + 1, pair.second + 2},
-            {pair.first + 1, pair.second - 2},
-            {pair.first - 1, pair.second + 2},
-            {pair.first - 1, pair.second - 2},
-            {pair.first + 2, pair.second + 1},
-            {pair.first + 2, pair.second - 1},
-            {pair.first - 2, pair.second + 1},
-            {pair.first - 2, pair.second - 1}
-        };
+                {
+                        {pair.first + 1, pair.second + 2},
+                        {pair.first + 1, pair.second - 2},
+                        {pair.first - 1, pair.second + 2},
+                        {pair.first - 1, pair.second - 2},
+                        {pair.first + 2, pair.second + 1},
+                        {pair.first + 2, pair.second - 1},
+                        {pair.first - 2, pair.second + 1},
+                        {pair.first - 2, pair.second - 1}
+                };
 
-        for (auto& newLocation : possibleMoves)
+        for (auto &newLocation: possibleMoves)
         {
             if (not isPosInsideBoard(newLocation))
             {
@@ -370,7 +373,7 @@ std::vector<Move> Board::generateAllBishopMoves(bool isWhite)
     std::vector<Move> moves;
     auto locationOfPieces = getAllPieces(Pieces::Bishop, isWhite);
 
-    for (auto& pair : locationOfPieces)
+    for (auto &pair: locationOfPieces)
     {
         auto movesFromLocation = generateBishopMovesFromLocation(pair, isWhite);
         moves.insert(moves.end(), movesFromLocation.begin(), movesFromLocation.end());
@@ -385,7 +388,7 @@ std::vector<Move> Board::generateAllQueenMoves(bool isWhite)
 
     auto locationOfPieces = getAllPieces(Pieces::Queen, isWhite);
 
-    for (auto& pair : locationOfPieces)
+    for (auto &pair: locationOfPieces)
     {
         auto rookMoves = generateRookMovesFromLocation(pair, isWhite);
         auto bishopMoves = generateBishopMovesFromLocation(pair, isWhite);
@@ -402,7 +405,7 @@ std::vector<Move> Board::generateAllKingMoves(bool isWhite)
 
     auto locationOfPieces = getAllPieces(Pieces::King, isWhite);
 
-    for (auto& pair : locationOfPieces)
+    for (auto &pair: locationOfPieces)
     {
         for (int i = -1; i < 2; i++)
         {
@@ -428,9 +431,12 @@ std::vector<Move> Board::generateAllKingMoves(bool isWhite)
 std::vector<Move> Board::generateRookMovesFromLocation(std::pair<int, int> pair, bool isWhite)
 {
     std::vector<Move> moves;
-    std::pair<int, int> directions[] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    std::pair<int, int> directions[] = {{1,  0},
+                                        {-1, 0},
+                                        {0,  1},
+                                        {0,  -1}};
 
-    for (const auto& direction : directions)
+    for (const auto &direction: directions)
     {
         for (int i = 1; i < 8; ++i)
         {
@@ -456,9 +462,12 @@ std::vector<Move> Board::generateRookMovesFromLocation(std::pair<int, int> pair,
 std::vector<Move> Board::generateBishopMovesFromLocation(std::pair<int, int> pair, bool isWhite)
 {
     std::vector<Move> moves;
-    std::pair<int, int> directions[] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+    std::pair<int, int> directions[] = {{1,  1},
+                                        {1,  -1},
+                                        {-1, 1},
+                                        {-1, -1}};
 
-    for (const auto& direction : directions)
+    for (const auto &direction: directions)
     {
         for (int i = 1; i < 8; ++i)
         {

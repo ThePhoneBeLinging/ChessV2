@@ -21,7 +21,6 @@ private:
     static std::pair<float, float> getDrawLocationFromTile(int x, int y);
     static void makeMoveFromNotation(const std::string& notation);
     static inline Board board_;
-    static inline bool isWhite_;
 };
 
 
