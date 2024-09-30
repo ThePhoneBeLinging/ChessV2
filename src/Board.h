@@ -7,11 +7,14 @@
 
 #include <cstdint>
 #include <vector>
+#include <memory>
 #include "Move.h"
 #include "Pieces.h"
+#include "DraggedPiece.h"
 
 
-class Board {
+class Board
+{
 public:
     Board();
 
@@ -34,6 +37,9 @@ public:
     static bool isPosInsideBoard(std::pair<int, int> location);
 
     bool isWhite_;
+
+    std::shared_ptr<DraggedPiece> draggedPiece_;
+
 private:
 
     std::vector<Move> generatePseudoLegalMoves(bool isWhite);

@@ -6,11 +6,18 @@
 #include "BoardValues.h"
 #include "EngineBase/EngineBase.h"
 
-DraggedPiece::DraggedPiece(uint64_t fromLocation, int initialX, int initialY)
+DraggedPiece::DraggedPiece(uint64_t fromLocation)
 {
     fromLocation = fromLocation;
-    location_ = std::make_pair(initialX, initialY);
-    offset_ = std::make_pair(initialX % TILESIZE, initialY % TILESIZE);
+    int position = 0;
+    while ((fromLocation & 1) == 0)
+    {
+        fromLocation >>= 1;
+        position++;
+    }
+    idToUpdate_ = position;
+    location_ = EngineBase::getMousePosition();
+    offset_ = std::make_pair(location_.first % TILESIZE, location_.second % TILESIZE);
 }
 
 uint64_t DraggedPiece::updateLocation()
@@ -21,9 +28,9 @@ uint64_t DraggedPiece::updateLocation()
     }
     else
     {
-        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, 63, SecondaryCMD::X,
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::X,
                                     (float) location_.first - (float) offset_.first});
-        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, 63, SecondaryCMD::Y,
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Y,
                                     (float) location_.second - (float) offset_.second});
 
         location_ = EngineBase::getMousePosition();
@@ -33,5 +40,5 @@ uint64_t DraggedPiece::updateLocation()
 
 uint64_t DraggedPiece::getFromLocation() const
 {
-    return fromLocation;
+    return fromLocation_;
 }

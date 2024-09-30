@@ -7,6 +7,7 @@
 #include "ChessV2.h"
 
 #include <iostream>
+#include <memory>
 #include <regex>
 #include <thread>
 #include "Board.h"
@@ -70,6 +71,24 @@ void ChessV2::launch()
 void ChessV2::update(float deltaTime)
 {
     board_.drawBoard();
+    if (board_.draggedPiece_ == nullptr && EngineBase::mouseButtonPressed(ENGINEBASE_BUTTON_LEFT))
+    {
+        std::pair<int, int> mousePos = EngineBase::getMousePosition();
+        mousePos.first = (int) ((mousePos.first - LEFTMARGIN) / TILESIZE);
+        mousePos.second = (int) ((mousePos.second - TOPMARGIN) / TILESIZE);
+        int indexOfDraggedPiece = mousePos.first + mousePos.second * 8;
+        board_.draggedPiece_ = std::make_shared<DraggedPiece>(Board::getBitBoardFromLocation(mousePos));
+        std::cout << "Mouse pressed at: " << mousePos.first << ", " << mousePos.second << std::endl;
+    }
+    else if (board_.draggedPiece_ != nullptr)
+    {
+        uint64_t result = board_.draggedPiece_->updateLocation();
+        if (result != 0)
+        {
+            board_.draggedPiece_ = nullptr;
+            std::cout << "Move to be made: " << std::endl;
+        }
+    }
     // This is currently not needed for the chess game
 }
 
