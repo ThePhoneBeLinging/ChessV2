@@ -173,14 +173,7 @@ void Board::executeMove(Move move)
     };
 
     // If the move captures an opponent's piece, remove it from the board
-    for (auto &bitBoard: bitBoards)
-    {
-        if (*bitBoard & toBitBoard)
-        {
-            *bitBoard &= ~toBitBoard;
-            break;
-        }
-    }
+    removePiece(toBitBoard);
 
     for (auto &bitBoard: bitBoards)
     {
@@ -489,4 +482,23 @@ std::vector<Move> Board::generateBishopMovesFromLocation(std::pair<int, int> pai
         }
     }
     return moves;
+}
+
+void Board::removePiece(uint64_t bitboard)
+{
+    uint64_t *bitBoards[] = {
+            &whitePawnsBitBoard_, &whiteRooksBitBoard_, &whiteKnightsBitBoard_,
+            &whiteBishopsBitBoard_, &whiteQueensBitBoard_, &whiteKingBitBoard_,
+            &blackPawnsBitBoard_, &blackRooksBitBoard_, &blackKnightsBitBoard_,
+            &blackBishopsBitBoard_, &blackQueensBitBoard_, &blackKingBitBoard_
+    };
+
+    for (auto &bitBoard: bitBoards)
+    {
+        if (*bitBoard & bitboard)
+        {
+            *bitBoard &= ~bitboard;
+            break;
+        }
+    }
 }

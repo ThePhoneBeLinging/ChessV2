@@ -26,6 +26,8 @@ public:
 
     static uint64_t getBitBoardFromLocation(std::pair<int, int> location);
 
+    void removePiece(uint64_t bitboard);
+
     void drawBoard();
 
     void executeMove(Move move);
