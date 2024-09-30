@@ -5,6 +5,7 @@
 #include "DraggedPiece.h"
 #include "BoardValues.h"
 #include "EngineBase/EngineBase.h"
+#include "Board.h"
 
 DraggedPiece::DraggedPiece(uint64_t fromLocation)
 {
@@ -31,7 +32,8 @@ uint64_t DraggedPiece::updateLocation()
                                     (float) originalLocation_.first});
         EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Y,
                                     (float) originalLocation_.second});
-        return location_.first / TILESIZE + (location_.second / TILESIZE) * 8;
+        return Board::getBitBoardFromLocation(
+                {(location_.first - LEFTMARGIN) / TILESIZE, ((location_.second - TOPMARGIN) / TILESIZE) * 8});
     }
     else
     {

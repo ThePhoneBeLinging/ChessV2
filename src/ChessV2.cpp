@@ -70,7 +70,7 @@ void ChessV2::launch()
 
 void ChessV2::update(float deltaTime)
 {
-    board_.drawBoard();
+
     if (board_.draggedPiece_ == nullptr && EngineBase::mouseButtonPressed(ENGINEBASE_BUTTON_LEFT))
     {
         std::pair<int, int> mousePos = EngineBase::getMousePosition();
@@ -91,7 +91,7 @@ void ChessV2::update(float deltaTime)
                 board_.generateAllLegalMoves().end())
             {
                 board_.executeMove(move);
-
+                board_.drawBoard();
             }
             board_.draggedPiece_ = nullptr;
         }
