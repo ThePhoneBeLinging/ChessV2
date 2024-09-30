@@ -12,13 +12,16 @@
 class DraggedPiece
 {
 public:
-    DraggedPiece(int initialX, int initialY);
+    DraggedPiece(uint64_t fromLocation, int initialX, int initialY);
 
-    void updateLocation();
+    uint64_t updateLocation();
+
+    [[nodiscard]] uint64_t getFromLocation() const;
 
 private:
     uint64_t fromLocation;
     std::pair<int, int> location_;
+    std::pair<int, int> offset_;
 };
 
 
