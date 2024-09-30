@@ -12,9 +12,8 @@ int main()
     EngineBase::loadTexture("invisibleTexture");
     TextureLoader::initializePieceTextures();
 
-    std::thread chessThread(ChessV2::launch);
+    ChessV2::launch();
     EngineBase::startGUI(ChessV2::update);
-    chessThread.join();
     std::cout << "Closing App!" << std::endl;
     return 0;
 }

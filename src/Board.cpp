@@ -155,6 +155,7 @@ void Board::drawBoard()
                                        });
         }
     }
+    EngineBase::executeCommand(Command(PrimaryCMD::DONEWRITING));
 }
 
 void Board::executeMove(Move move)

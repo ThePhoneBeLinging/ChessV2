@@ -40,8 +40,6 @@ void ChessV2::launch()
                                    });
         EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::Z, 1});
     }
-    // This is a hack to force EngineBase to sort the DrawAbles based on Z value
-    EngineBase::addDrawAble();
 
     for (int i = 64; i < 128; i++)
     {
@@ -66,11 +64,13 @@ void ChessV2::launch()
             EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX, 2});
         }
     }
-    board_.drawBoard();
+    EngineBase::executeCommand(Command(PrimaryCMD::DONEWRITING));
+    EngineBase::executeCommand(Command(PrimaryCMD::SORTDRAWABLES));
 }
 
 void ChessV2::update(float deltaTime)
 {
+    board_.drawBoard();
     // This is currently not needed for the chess game
 }
 
