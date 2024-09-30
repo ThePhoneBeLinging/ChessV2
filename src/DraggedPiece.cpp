@@ -18,12 +18,19 @@ DraggedPiece::DraggedPiece(uint64_t fromLocation)
     idToUpdate_ = position;
     location_ = EngineBase::getMousePosition();
     offset_ = std::make_pair((location_.first - LEFTMARGIN) % TILESIZE, (location_.second - TOPMARGIN) % TILESIZE);
+    originalLocation_ = location_;
+    originalLocation_.first -= offset_.first;
+    originalLocation_.second -= offset_.second;
 }
 
 uint64_t DraggedPiece::updateLocation()
 {
     if (EngineBase::mouseButtonReleased(ENGINEBASE_BUTTON_LEFT))
     {
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::X,
+                                    (float) originalLocation_.first});
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Y,
+                                    (float) originalLocation_.second});
         return location_.first / TILESIZE + (location_.second / TILESIZE) * 8;
     }
     else

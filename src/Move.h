@@ -7,12 +7,20 @@
 
 #include "Pieces.h"
 
-typedef struct Move
+class Move
 {
-    // Only the position of the piece
+public:
+    Move(uint64_t from, uint64_t to) : from(from), to(to)
+    {};
+
+    bool operator==(const Move &rhs) const
+    {
+        return from == rhs.from && to == rhs.to;
+    }
+
     uint64_t from;
     uint64_t to;
-} Move;
+};
 
 #endif //MOVE_H
 

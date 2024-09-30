@@ -22,6 +22,7 @@ private:
     uint64_t fromLocation_;
     std::pair<int, int> location_;
     std::pair<int, int> offset_;
+    std::pair<int, int> originalLocation_;
     int idToUpdate_;
 };
 

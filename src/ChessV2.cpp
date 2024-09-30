@@ -78,18 +78,22 @@ void ChessV2::update(float deltaTime)
         mousePos.second = (int) ((mousePos.second - TOPMARGIN) / TILESIZE);
         if (Board::isPosInsideBoard(mousePos))
         {
-            int indexOfDraggedPiece = mousePos.first + mousePos.second * 8;
             board_.draggedPiece_ = std::make_shared<DraggedPiece>(Board::getBitBoardFromLocation(mousePos));
-            std::cout << "Mouse pressed at: " << mousePos.first << ", " << mousePos.second << std::endl;
         }
     }
-    else if (board_.draggedPiece_ != nullptr)
+    if (board_.draggedPiece_ != nullptr)
     {
         uint64_t result = board_.draggedPiece_->updateLocation();
         if (result != 0)
         {
+            Move move = {board_.draggedPiece_->getFromLocation(), result};
+            if (std::find(board_.generateAllLegalMoves().begin(), board_.generateAllLegalMoves().end(), move) !=
+                board_.generateAllLegalMoves().end())
+            {
+                board_.executeMove(move);
+
+            }
             board_.draggedPiece_ = nullptr;
-            std::cout << "Move to be made: " << std::endl;
         }
     }
 }
