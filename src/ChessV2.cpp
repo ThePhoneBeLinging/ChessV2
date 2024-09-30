@@ -76,9 +76,12 @@ void ChessV2::update(float deltaTime)
         std::pair<int, int> mousePos = EngineBase::getMousePosition();
         mousePos.first = (int) ((mousePos.first - LEFTMARGIN) / TILESIZE);
         mousePos.second = (int) ((mousePos.second - TOPMARGIN) / TILESIZE);
-        int indexOfDraggedPiece = mousePos.first + mousePos.second * 8;
-        board_.draggedPiece_ = std::make_shared<DraggedPiece>(Board::getBitBoardFromLocation(mousePos));
-        std::cout << "Mouse pressed at: " << mousePos.first << ", " << mousePos.second << std::endl;
+        if (Board::isPosInsideBoard(mousePos))
+        {
+            int indexOfDraggedPiece = mousePos.first + mousePos.second * 8;
+            board_.draggedPiece_ = std::make_shared<DraggedPiece>(Board::getBitBoardFromLocation(mousePos));
+            std::cout << "Mouse pressed at: " << mousePos.first << ", " << mousePos.second << std::endl;
+        }
     }
     else if (board_.draggedPiece_ != nullptr)
     {
@@ -89,7 +92,6 @@ void ChessV2::update(float deltaTime)
             std::cout << "Move to be made: " << std::endl;
         }
     }
-    // This is currently not needed for the chess game
 }
 
 std::pair<float, float> ChessV2::getDrawLocationFromTile(int x, int y)

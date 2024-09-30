@@ -32,6 +32,7 @@ uint64_t DraggedPiece::updateLocation()
                                     (float) location_.first - (float) offset_.first});
         EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Y,
                                     (float) location_.second - (float) offset_.second});
+        EngineBase::executeCommand(Command(PrimaryCMD::DONEWRITING));
 
         location_ = EngineBase::getMousePosition();
         return 0;
