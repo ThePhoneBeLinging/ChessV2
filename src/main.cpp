@@ -11,10 +11,7 @@ int main()
     EngineBase::loadTexture("Resources/Images/brown.png");
     EngineBase::loadTexture("invisibleTexture");
     TextureLoader::initializePieceTextures();
-    for (int i = 0; i < 128; i++)
-    {
-        EngineBase::addDrawAble();
-    }
+
     std::thread chessThread(ChessV2::launch);
     EngineBase::startGUI(ChessV2::update);
     chessThread.join();

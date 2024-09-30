@@ -17,6 +17,10 @@
 
 void ChessV2::launch()
 {
+    for (int i = 0; i < 128; i++)
+    {
+        EngineBase::addDrawAble();
+    }
     board_ = Board();
     for (int i = 0; i < 64; i++)
     {
