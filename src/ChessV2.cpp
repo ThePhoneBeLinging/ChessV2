@@ -60,23 +60,11 @@ void ChessV2::launch()
             EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX, 2});
         }
     }
-    handleInput();
 }
 
 void ChessV2::update(float deltaTime)
 {
     // This is currently not needed for the chess game
-}
-
-void ChessV2::handleInput()
-{
-    while (not board_.generateAllLegalMoves(isWhite_).empty())
-    {
-        board_.drawBoard();
-        std::string input;
-        std::cin >> input;
-        makeMoveFromNotation(input);
-    }
 }
 
 std::pair<float, float> ChessV2::getDrawLocationFromTile(int x, int y)
