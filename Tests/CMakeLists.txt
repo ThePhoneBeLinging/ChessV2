@@ -3,8 +3,6 @@ project(ChessV2_Tests)
 
 set(CMAKE_CXX_STANDARD 23)
 
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
 set(SOURCES
         ../src/Board.cpp
         ../src/DepthSearch.cpp
@@ -14,7 +12,7 @@ set(SOURCES
 add_executable(ChessV2_Tests ${SOURCES})
 
 target_link_libraries(ChessV2_Tests PUBLIC
-        GTest::GTest
-        GTest::Main
+        GTest::gtest
+        GTest::gtest_main
         EngineBase
 )

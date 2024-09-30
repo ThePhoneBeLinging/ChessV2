@@ -7,10 +7,18 @@ set(CMAKE_CXX_STANDARD 23)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Resources
         DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
+include(FetchContent)
 
-add_subdirectory(src)
+FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG release-1.12.1  # Specify the version you need
+)
+
+FetchContent_MakeAvailable(googletest)
+
+# Now you can link against gtest and gtest_main
+
 
 add_subdirectory(dependencies/Utility)
 add_subdirectory(dependencies/EngineBase)

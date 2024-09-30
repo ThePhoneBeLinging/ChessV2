@@ -5,7 +5,6 @@
 #include "Board.h"
 
 #include <iostream>
-#include <MacTypes.h>
 
 #include "EngineBase/EngineBase.h"
 #include "Texture/TextureIndices.h"

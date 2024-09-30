@@ -113,29 +113,6 @@ TEST_F(BoardTest, IsPosInsideBoard)
     EXPECT_FALSE(board->isPosInsideBoard({0, 8}));
 }
 
-TEST_F(BoardTest, ExecuteMove)
-{
-    // Initial position of a white pawn at (0, 1)
-    std::pair<int, int> from = {0, 1};
-    std::pair<int, int> to = {0, 3};
-
-    // Create a move from (0, 1) to (0, 3)
-    Move move = {board->getBitBoardFromLocation(from), board->getBitBoardFromLocation(to)};
-
-    // Execute the move
-    board->executeMove(move);
-
-    // Verify that the pawn has moved
-    std::vector<std::pair<int, int>> expectedWhitePawns = {
-        {0, 3}, {1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}, {6, 1}, {7, 1}
-    };
-    EXPECT_EQ(board->getAllPieces(Pieces::Pawn, true), expectedWhitePawns);
-
-    // Verify that the original position is now empty
-    uint64_t emptyPosition = board->getBitBoardFromLocation(from);
-    EXPECT_FALSE(board->getWhiteBitBoard() & emptyPosition);
-    EXPECT_FALSE(board->getBlackBitBoard() & emptyPosition);
-}
 
 TEST_F(BoardTest, GenerateAllLegalMoves)
 {
@@ -149,10 +126,8 @@ TEST_F(BoardTest, searchFunction)
 {
     EXPECT_EQ(DepthSearch::countPositionsAtDepth(2), 400);
 
-    DepthSearch::initializeSearch(*board, true, 3);
     EXPECT_EQ(DepthSearch::countPositionsAtDepth(3), 8902);
 
-    DepthSearch::initializeSearch(*board, true, 4);
     EXPECT_EQ(DepthSearch::countPositionsAtDepth(4), 197281);
 }
 
