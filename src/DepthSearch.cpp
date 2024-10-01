@@ -6,7 +6,7 @@
 
 #include <thread>
 
-int DepthSearch::initializeSearch(Board& board, int depth)
+int DepthSearch::initializeSearch(Board &board, int depth)
 {
     return searchRecursive(board, depth);
 }
@@ -22,7 +22,7 @@ int DepthSearch::countPositionsAtDepth(int depth)
     {
         Board newBoard = Board(board);
         newBoard.executeMove(legalMoves[i]);
-        threads[i] = std::thread(recursiveCountPositionsAtDepth, std::ref(newBoard), depth - 1, &result[i]);
+        threads[i] = std::thread(recursiveCountPositionsAtDepth, newBoard, depth - 1, &result[i]);
     }
 
     int totalCount = 0;
@@ -43,7 +43,7 @@ int DepthSearch::searchRecursive(Board board, int depth)
     }
     int max = INT32_MAX;
     int min = INT32_MIN;
-    for (const auto& move : board.generateAllLegalMoves())
+    for (const auto &move: board.generateAllLegalMoves())
     {
         auto newBoard = Board(board);
         newBoard.executeMove(move);
@@ -61,14 +61,14 @@ int DepthSearch::searchRecursive(Board board, int depth)
     return board.isWhite_ ? max : min;
 }
 
-void DepthSearch::recursiveCountPositionsAtDepth(Board board, int depth, int* count)
+void DepthSearch::recursiveCountPositionsAtDepth(Board board, int depth, int *count)
 {
     if (depth == 0)
     {
         (*count)++;
         return;
     }
-    for (auto& move : board.generateAllLegalMoves())
+    for (auto &move: board.generateAllLegalMoves())
     {
         auto newBoard = Board(board);
         newBoard.executeMove(move);

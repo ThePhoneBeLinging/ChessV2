@@ -18,7 +18,7 @@ class Board
 public:
     Board();
 
-    Board(Board &board) = default;
+    Board(const Board &board) = default;
 
     std::vector<Move> generateAllLegalMoves();
 
