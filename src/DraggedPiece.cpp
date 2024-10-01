@@ -22,25 +22,41 @@ DraggedPiece::DraggedPiece(uint64_t fromLocation)
     originalLocation_ = location_;
     originalLocation_.first -= offset_.first;
     originalLocation_.second -= offset_.second;
+    EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Z, 2});
+    EngineBase::executeCommand(Command(PrimaryCMD::DONEWRITING));
+    EngineBase::executeCommand(Command(PrimaryCMD::SORTDRAWABLES));
 }
 
 uint64_t DraggedPiece::updateLocation()
 {
     if (EngineBase::mouseButtonReleased(ENGINEBASE_BUTTON_LEFT))
     {
-        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::X,
-                                    (float) originalLocation_.first});
-        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Y,
-                                    (float) originalLocation_.second});
-        return Board::getBitBoardFromLocation(
-                {(location_.first - LEFTMARGIN) / TILESIZE, ((location_.second - TOPMARGIN) / TILESIZE) * 8});
+        EngineBase::executeCommand({
+            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::X,
+            (float)originalLocation_.first
+        });
+        EngineBase::executeCommand({
+            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Y,
+            (float)originalLocation_.second
+        });
+        location_.first = (int)(location_.first - LEFTMARGIN);
+        location_.second = (int)(location_.second - TOPMARGIN);
+        location_.first -= location_.first % TILESIZE;
+        location_.second -= location_.second % TILESIZE;
+        location_.first /= TILESIZE;
+        location_.second /= TILESIZE;
+        return Board::getBitBoardFromLocation(location_);
     }
     else
     {
-        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::X,
-                                    (float) location_.first - (float) offset_.first});
-        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Y,
-                                    (float) location_.second - (float) offset_.second});
+        EngineBase::executeCommand({
+            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::X,
+            (float)location_.first - (float)offset_.first
+        });
+        EngineBase::executeCommand({
+            PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Y,
+            (float)location_.second - (float)offset_.second
+        });
         EngineBase::executeCommand(Command(PrimaryCMD::DONEWRITING));
 
         location_ = EngineBase::getMousePosition();
