@@ -18,7 +18,7 @@ class Board
 public:
     Board();
 
-    Board(const Board &board) = default;
+    Board(const Board& board) = default;
 
     std::vector<Move> generateAllLegalMoves();
 
@@ -42,11 +42,12 @@ public:
 
     std::shared_ptr<DraggedPiece> draggedPiece_;
 
-private:
+    [[nodiscard]] Pieces getPieceFromLocation(uint64_t bitboard) const;
 
+private:
     std::vector<Move> generatePseudoLegalMoves(bool isWhite);
 
-    [[nodiscard]] bool isMoveLegal(const Move &move, bool isWhite);
+    [[nodiscard]] bool isMoveLegal(const Move& move, bool isWhite);
 
     [[nodiscard]] bool isTileOccupiedByColor(std::pair<int, int> location, bool isWhite) const;
 
@@ -67,6 +68,9 @@ private:
 
     std::vector<Move> generateBishopMovesFromLocation(std::pair<int, int> location, bool isWhite);
 
+    Move lastWhiteMove_;
+    Move lastBlackMove_;
+
     uint64_t whitePawnsBitBoard_;
     uint64_t whiteRooksBitBoard_;
     uint64_t whiteKnightsBitBoard_;
@@ -79,7 +83,6 @@ private:
     uint64_t blackBishopsBitBoard_;
     uint64_t blackQueensBitBoard_;
     uint64_t blackKingBitBoard_;
-
 };
 
 

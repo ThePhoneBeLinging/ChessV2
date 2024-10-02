@@ -9,7 +9,7 @@
 #include "EngineBase/EngineBase.h"
 #include "Texture/TextureIndices.h"
 
-Board::Board()
+Board::Board() : lastWhiteMove_(0, 0), lastBlackMove_(0, 0)
 {
     isWhite_ = true;
     // Initialize white pieces
@@ -160,9 +160,11 @@ void Board::drawBoard()
 
 void Board::executeMove(Move move)
 {
+    isWhite_ ? lastWhiteMove_ : lastBlackMove_ = move;
     // TODO Could speed this by taking color as an argument
     uint64_t fromBitBoard = move.from;
     uint64_t toBitBoard = move.to;
+    uint64_t capturedPiece = move.capturedPiece;
 
     // Determine which piece is moving
     uint64_t* bitBoards[] = {
@@ -180,6 +182,7 @@ void Board::executeMove(Move move)
         if (*bitBoard & fromBitBoard)
         {
             *bitBoard &= ~fromBitBoard; // Remove piece from the original position
+            *bitBoard &= ~capturedPiece; // Remove captured piece
             *bitBoard |= toBitBoard; // Place piece at the new position
             break;
         }
@@ -241,6 +244,25 @@ bool Board::isTileOccupiedByColor(std::pair<int, int> location, bool isWhite) co
 bool Board::isPosInsideBoard(std::pair<int, int> location)
 {
     return location.first >= 0 && location.first < 8 && location.second >= 0 && location.second < 8;
+}
+
+Pieces Board::getPieceFromLocation(uint64_t bitboard) const
+{
+    if (whitePawnsBitBoard_ & bitboard) return Pieces::Pawn;
+    if (whiteRooksBitBoard_ & bitboard) return Pieces::Rook;
+    if (whiteKnightsBitBoard_ & bitboard) return Pieces::Knight;
+    if (whiteBishopsBitBoard_ & bitboard) return Pieces::Bishop;
+    if (whiteQueensBitBoard_ & bitboard) return Pieces::Queen;
+    if (whiteKingBitBoard_ & bitboard) return Pieces::King;
+    if (blackPawnsBitBoard_ & bitboard) return Pieces::Pawn;
+    if (blackRooksBitBoard_ & bitboard) return Pieces::Rook;
+    if (blackKnightsBitBoard_ & bitboard) return Pieces::Knight;
+    if (blackBishopsBitBoard_ & bitboard) return Pieces::Bishop;
+    if (blackQueensBitBoard_ & bitboard) return Pieces::Queen;
+    if (blackKingBitBoard_ & bitboard) return Pieces::King;
+
+
+    return Pieces::None;
 }
 
 std::vector<Move> Board::generatePseudoLegalMoves(bool isWhite)
@@ -307,7 +329,37 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
                 moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
             }
         }
+        // Check for en passant capture
+        auto lastMove = isWhite ? lastWhiteMove_ : lastBlackMove_;
+        if (getPieceFromLocation(lastMove.to) == Pieces::Pawn)
+        {
+            int lastMoveFromBitPos = __builtin_ctzll(lastMove.from);
+            int lastMoveToBitPos = __builtin_ctzll(lastMove.to);
+
+            int lastMoveFromRow = lastMoveFromBitPos / 8;
+            int lastMoveToRow = lastMoveToBitPos / 8;
+
+            if (std::abs(lastMoveToRow - lastMoveFromRow) == 2)
+            {
+                int moveFromRow = pair.second;
+                int moveFromCol = pair.first;
+                int moveToRow = moveFromRow + (isWhite ? 1 : -1);
+                int moveToCol = lastMoveToBitPos % 8;
+
+                if (std::abs(moveFromCol - moveToCol) == 1 && abs(moveFromRow - moveToRow) == 1 && isPosInsideBoard({
+                    moveToCol, moveToRow
+                }) && isTileOccupiedByColor({moveToCol, moveFromRow}, not isWhite))
+                {
+                    uint64_t targetSquare = getBitBoardFromLocation({moveToCol, moveToRow});
+                    uint64_t capturedPawnSquare = getBitBoardFromLocation({moveToCol, moveFromRow});
+                    auto move = Move(targetSquare, getBitBoardFromLocation({moveToCol, moveToRow}));
+                    move.capturedPiece = capturedPawnSquare;
+                    moves.push_back(move);
+                }
+            }
+        }
     }
+
     return moves;
 }
 
@@ -436,7 +488,9 @@ std::vector<Move> Board::generateRookMovesFromLocation(std::pair<int, int> pair,
     {
         for (int i = 1; i < 8; ++i)
         {
-            std::pair<int, int> newLocation = {pair.first + i * direction.first, pair.second + i * direction.second};
+            std::pair<int, int> newLocation = {
+                pair.first + i * direction.first, pair.second + i * direction.second
+            };
             if (!isPosInsideBoard(newLocation))
             {
                 break;
@@ -469,7 +523,9 @@ std::vector<Move> Board::generateBishopMovesFromLocation(std::pair<int, int> pai
     {
         for (int i = 1; i < 8; ++i)
         {
-            std::pair<int, int> newLocation = {pair.first + i * direction.first, pair.second + i * direction.second};
+            std::pair<int, int> newLocation = {
+                pair.first + i * direction.first, pair.second + i * direction.second
+            };
             if (!isPosInsideBoard(newLocation))
             {
                 break;

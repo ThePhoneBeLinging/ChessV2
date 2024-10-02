@@ -160,7 +160,7 @@ TEST_F(BoardTest, searchFunctionDepth4)
 
 TEST_F(BoardTest, searchFunctionDepth5)
 {
-    //EXPECT_EQ(DepthSearch::countPositionsAtDepth(5), 4865609);
+    EXPECT_EQ(DepthSearch::countPositionsAtDepth(5), 4865609);
 }
 
 
