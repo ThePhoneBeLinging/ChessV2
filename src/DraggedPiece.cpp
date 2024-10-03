@@ -39,6 +39,8 @@ uint64_t DraggedPiece::updateLocation()
             PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Y,
             (float)originalLocation_.second
         });
+        EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Z, 1});
+        EngineBase::executeCommand(Command(PrimaryCMD::SORTDRAWABLES));
         location_.first = (int)(location_.first - LEFTMARGIN);
         location_.second = (int)(location_.second - TOPMARGIN);
         location_.first -= location_.first % TILESIZE;
