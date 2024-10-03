@@ -303,7 +303,7 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
         if (not isTileOccupiedByColor(newLocation, true) && not isTileOccupiedByColor(newLocation, false)
             && isPosInsideBoard(newLocation))
         {
-            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            moves.emplace_back(getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation));
         }
         // Check if the pawn can move two steps forward
         newLocation.second += (isWhite ? 1 : -1);
@@ -312,7 +312,7 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
             && not isTileOccupiedByColor(newLocation, false) && not isTileOccupiedByColor(otherLocationToCheck, true) &&
             not isTileOccupiedByColor(otherLocationToCheck, false) && isPosInsideBoard(newLocation))
         {
-            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            moves.emplace_back(getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation));
         }
         // Resets newLocation
         newLocation = {pair.first, pair.second};
@@ -326,11 +326,11 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
             newLocation = {pair.first + i, pair.second + (isWhite ? 1 : -1)};
             if (isTileOccupiedByColor(newLocation, not isWhite) && isPosInsideBoard(newLocation))
             {
-                moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+                moves.emplace_back(getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation));
             }
         }
         // Check for en passant capture
-        auto lastMove = isWhite ? lastWhiteMove_ : lastBlackMove_;
+        auto lastMove = isWhite ? lastBlackMove_ : lastWhiteMove_;
         if (getPieceFromLocation(lastMove.to) == Pieces::Pawn)
         {
             int lastMoveFromBitPos = __builtin_ctzll(lastMove.from);
@@ -352,7 +352,7 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
                 {
                     uint64_t targetSquare = getBitBoardFromLocation({moveToCol, moveToRow});
                     uint64_t capturedPawnSquare = getBitBoardFromLocation({moveToCol, moveFromRow});
-                    auto move = Move(targetSquare, getBitBoardFromLocation({moveToCol, moveToRow}));
+                    auto move = Move(getBitBoardFromLocation(pair), targetSquare);
                     move.capturedPiece = capturedPawnSquare;
                     moves.push_back(move);
                 }
