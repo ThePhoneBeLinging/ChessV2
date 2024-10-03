@@ -163,6 +163,11 @@ TEST_F(BoardTest, searchFunctionDepth5)
     EXPECT_EQ(DepthSearch::countPositionsAtDepth(5), 4865609);
 }
 
+TEST_F(BoardTest, searchFunctionDepth6)
+{
+    EXPECT_EQ(DepthSearch::countPositionsAtDepth(6), 119060324);
+}
+
 
 int main(int argc, char** argv)
 {
