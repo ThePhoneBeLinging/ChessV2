@@ -160,8 +160,14 @@ void Board::drawBoard()
 
 void Board::executeMove(Move move)
 {
-    isWhite_ ? lastWhiteMove_ : lastBlackMove_ = move;
-    // TODO Could speed this by taking color as an argument
+    if (isWhite_)
+    {
+        lastWhiteMove_ = move;
+    }
+    else
+    {
+        lastBlackMove_ = move;
+    } // TODO Could speed this by taking color as an argument
     uint64_t fromBitBoard = move.from;
     uint64_t toBitBoard = move.to;
     uint64_t capturedPiece = move.capturedPiece;
@@ -176,13 +182,16 @@ void Board::executeMove(Move move)
 
     // If the move captures an opponent's piece, remove it from the board
     removePiece(toBitBoard);
+    if (capturedPiece != 0)
+    {
+        removePiece(capturedPiece);
+    }
 
     for (auto& bitBoard : bitBoards)
     {
         if (*bitBoard & fromBitBoard)
         {
             *bitBoard &= ~fromBitBoard; // Remove piece from the original position
-            *bitBoard &= ~capturedPiece; // Remove captured piece
             *bitBoard |= toBitBoard; // Place piece at the new position
             break;
         }
@@ -351,9 +360,8 @@ std::vector<Move> Board::generateAllPawnMoves(bool isWhite)
                 }) && isTileOccupiedByColor({moveToCol, moveFromRow}, not isWhite))
                 {
                     uint64_t targetSquare = getBitBoardFromLocation({moveToCol, moveToRow});
-                    uint64_t capturedPawnSquare = getBitBoardFromLocation({moveToCol, moveFromRow});
                     auto move = Move(getBitBoardFromLocation(pair), targetSquare);
-                    move.capturedPiece = capturedPawnSquare;
+                    move.capturedPiece = getBitBoardFromLocation({moveToCol, moveFromRow});
                     moves.push_back(move);
                 }
             }
