@@ -68,7 +68,13 @@ void DepthSearch::recursiveCountPositionsAtDepth(Board board, int depth, int *co
         (*count)++;
         return;
     }
-    for (auto &move: board.generateAllLegalMoves())
+    auto legalMoves = board.generateAllLegalMoves();
+    if (legalMoves.empty())
+    {
+        (*count)++;
+        return;
+    }
+    for (auto &move: legalMoves)
     {
         auto newBoard = Board(board);
         newBoard.executeMove(move);
