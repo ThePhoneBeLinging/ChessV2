@@ -15,10 +15,10 @@ class ChessV2
 {
 public:
     static void launch();
-    static void handleDrags();
     static void update(float deltaTime);
 
 private:
+    static void handleDrags();
     static std::pair<float, float> getDrawLocationFromTile(int x, int y);
     static void makeMoveFromNotation(const std::string& notation);
     static inline Board board_;
