@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.28)
 project(ChessV2)
 
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+endif()
+
 set(CMAKE_BUILD_FLAGS "-Wall -Wextra -Wpedantic -Werror")
 set(CMAKE_CXX_STANDARD 23)
 
