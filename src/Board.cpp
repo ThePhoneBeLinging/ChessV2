@@ -257,20 +257,12 @@ bool Board::isPosInsideBoard(std::pair<int, int> location)
 
 Pieces Board::getPieceFromLocation(uint64_t bitboard) const
 {
-    if (whitePawnsBitBoard_ & bitboard) return Pieces::Pawn;
-    if (whiteRooksBitBoard_ & bitboard) return Pieces::Rook;
-    if (whiteKnightsBitBoard_ & bitboard) return Pieces::Knight;
-    if (whiteBishopsBitBoard_ & bitboard) return Pieces::Bishop;
-    if (whiteQueensBitBoard_ & bitboard) return Pieces::Queen;
-    if (whiteKingBitBoard_ & bitboard) return Pieces::King;
-    if (blackPawnsBitBoard_ & bitboard) return Pieces::Pawn;
-    if (blackRooksBitBoard_ & bitboard) return Pieces::Rook;
-    if (blackKnightsBitBoard_ & bitboard) return Pieces::Knight;
-    if (blackBishopsBitBoard_ & bitboard) return Pieces::Bishop;
-    if (blackQueensBitBoard_ & bitboard) return Pieces::Queen;
-    if (blackKingBitBoard_ & bitboard) return Pieces::King;
-
-
+    if ((whitePawnsBitBoard_ | blackPawnsBitBoard_) & bitboard) return Pieces::Pawn;
+    if ((whiteRooksBitBoard_ | blackRooksBitBoard_) & bitboard) return Pieces::Rook;
+    if ((whiteKnightsBitBoard_ | blackKnightsBitBoard_) & bitboard) return Pieces::Knight;
+    if ((whiteBishopsBitBoard_ | blackBishopsBitBoard_) & bitboard) return Pieces::Bishop;
+    if ((whiteQueensBitBoard_ | blackQueensBitBoard_) & bitboard) return Pieces::Queen;
+    if ((whiteKingBitBoard_ | blackKingBitBoard_) & bitboard) return Pieces::King;
     return Pieces::None;
 }
 
