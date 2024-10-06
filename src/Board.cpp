@@ -99,7 +99,7 @@ void Board::drawBoard()
     {
         EngineBase::executeCommand({
             PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX,
-            (float)TextureIndices::EMPTY_BOARD_SQUARE
+            static_cast<float>(TextureIndices::EMPTY_BOARD_SQUARE)
         });
     }
     TextureIndices textureToUse = TextureIndices::EMPTY_BOARD_SQUARE;
@@ -151,7 +151,7 @@ void Board::drawBoard()
             EngineBase::executeCommand({
                 PrimaryCMD::UPDATE, ObjectType::DRAWABLE, pairs.first + pairs.second * 8,
                 SecondaryCMD::TEXTUREINDEX,
-                (float)textureToUse
+                static_cast<float>(textureToUse)
             });
         }
     }
@@ -234,7 +234,7 @@ bool Board::isMoveLegal(const Move& move, bool isWhite)
     auto opponentMoves = tempBoard.generatePseudoLegalMoves(!isWhite);
     for (const auto& opponentMove : opponentMoves)
     {
-        if (opponentMove.to == tempBoard.getBitBoardFromLocation(kingPosition))
+        if (opponentMove.to == getBitBoardFromLocation(kingPosition))
         {
             return false; // King is in check
         }
@@ -407,7 +407,7 @@ std::vector<Move> Board::generateAllKnightMoves(bool isWhite)
             {
                 continue;
             }
-            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            moves.emplace_back(getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation));
         }
     }
 
@@ -466,7 +466,7 @@ std::vector<Move> Board::generateAllKingMoves(bool isWhite)
                 {
                     continue;
                 }
-                moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+                moves.emplace_back(getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation));
             }
         }
     }
@@ -499,7 +499,7 @@ std::vector<Move> Board::generateRookMovesFromLocation(std::pair<int, int> pair,
             {
                 break;
             }
-            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            moves.emplace_back(getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation));
             if (isTileOccupiedByColor(newLocation, !isWhite))
             {
                 break;
@@ -534,7 +534,7 @@ std::vector<Move> Board::generateBishopMovesFromLocation(std::pair<int, int> pai
             {
                 break;
             }
-            moves.push_back({getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation)});
+            moves.emplace_back(getBitBoardFromLocation(pair), getBitBoardFromLocation(newLocation));
             if (isTileOccupiedByColor(newLocation, !isWhite))
             {
                 break;

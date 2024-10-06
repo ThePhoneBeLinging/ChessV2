@@ -5,8 +5,6 @@
 #ifndef MOVE_H
 #define MOVE_H
 
-#include "Pieces.h"
-
 class Move
 {
 public:

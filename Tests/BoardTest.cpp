@@ -19,7 +19,7 @@ protected:
         delete board;
     }
 
-    Board* board;
+    Board* board{};
 };
 
 TEST_F(BoardTest, InitialBoardPositions)

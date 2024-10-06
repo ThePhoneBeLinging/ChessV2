@@ -33,11 +33,11 @@ uint64_t DraggedPiece::updateLocation()
     {
         EngineBase::executeCommand({
             PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::X,
-            (float)originalLocation_.first
+            static_cast<float>(originalLocation_.first)
         });
         EngineBase::executeCommand({
             PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Y,
-            (float)originalLocation_.second
+            static_cast<float>(originalLocation_.second)
         });
         EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Z, 1});
         EngineBase::executeCommand(Command(PrimaryCMD::SORTDRAWABLES));
@@ -53,11 +53,11 @@ uint64_t DraggedPiece::updateLocation()
     {
         EngineBase::executeCommand({
             PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::X,
-            (float)location_.first - (float)offset_.first
+            static_cast<float>(location_.first) - static_cast<float>(offset_.first)
         });
         EngineBase::executeCommand({
             PrimaryCMD::UPDATE, ObjectType::DRAWABLE, idToUpdate_, SecondaryCMD::Y,
-            (float)location_.second - (float)offset_.second
+            static_cast<float>(location_.second) - static_cast<float>(offset_.second)
         });
         EngineBase::executeCommand(Command(PrimaryCMD::DONEWRITING));
 

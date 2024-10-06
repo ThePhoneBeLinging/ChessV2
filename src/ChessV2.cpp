@@ -35,7 +35,7 @@ void ChessV2::launch()
         });
         EngineBase::executeCommand({
             PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::TEXTUREINDEX,
-            (int)TextureIndices::EMPTY_BOARD_SQUARE
+            static_cast<int>(TextureIndices::EMPTY_BOARD_SQUARE)
         });
         EngineBase::executeCommand({PrimaryCMD::UPDATE, ObjectType::DRAWABLE, i, SecondaryCMD::Z, 1});
     }
@@ -112,7 +112,7 @@ void ChessV2::update(float deltaTime)
 
 std::pair<float, float> ChessV2::getDrawLocationFromTile(int x, int y)
 {
-    return {LEFTMARGIN + (float)x * TILESIZE, TOPMARGIN + (float)y * TILESIZE};
+    return {LEFTMARGIN + static_cast<float>(x) * TILESIZE, TOPMARGIN + static_cast<float>(y) * TILESIZE};
 }
 
 void ChessV2::makeMoveFromNotation(const std::string& notation)
