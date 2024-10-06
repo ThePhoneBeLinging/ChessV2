@@ -68,7 +68,7 @@ void ChessV2::launch()
     board_.drawBoard();
 }
 
-void ChessV2::update(float deltaTime)
+void ChessV2::handleDrags()
 {
     if (board_.draggedPiece_ == nullptr && EngineBase::mouseButtonPressed(ENGINEBASE_BUTTON_LEFT))
     {
@@ -103,6 +103,11 @@ void ChessV2::update(float deltaTime)
             board_.drawBoard();
         }
     }
+}
+
+void ChessV2::update(float deltaTime)
+{
+    handleDrags();
 }
 
 std::pair<float, float> ChessV2::getDrawLocationFromTile(int x, int y)

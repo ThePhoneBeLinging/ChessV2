@@ -15,6 +15,7 @@ class ChessV2
 {
 public:
     static void launch();
+    static void handleDrags();
     static void update(float deltaTime);
 
 private:
