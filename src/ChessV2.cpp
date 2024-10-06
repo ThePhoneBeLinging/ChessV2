@@ -91,6 +91,7 @@ void ChessV2::handleDrags()
             {
                 if (move == moveToCheckAgainst)
                 {
+                    move = moveToCheckAgainst;
                     legalMove = true;
                     break;
                 }
